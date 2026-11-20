@@ -72,12 +72,26 @@ assets/
 
 ## 🚀 1. Put the site online (free)
 
-**Option A: GitHub Pages**
+**Option A (recommended): Cloudflare Pages + your own domain**
+
+Cloudflare rebuilds the site every time something is pushed to GitHub, so **Publish** in the admin panel goes live about a minute later.
+
+1. Cloudflare dashboard → **Workers & Pages → Create → Pages → Connect to Git**. Authorise GitHub and pick `elf-shop`.
+2. Build settings: **Framework preset:** None · **Build command:** *(leave empty)* · **Build output directory:** `/`. Production branch: the branch the admin panel publishes to (Publish → *Branch the site is published from*). Press **Save and Deploy**.
+3. The site is live at `https://elf-shop-xxx.pages.dev`.
+4. **Domain:** Cloudflare → **Add a domain** → enter your domain → Free plan. Cloudflare shows two nameservers.
+   In **Namecheap → Domain List → Manage → Nameservers** choose **Custom DNS**, paste the two Cloudflare nameservers and save (usually active within an hour, at most 24 h).
+5. Back in the Pages project → **Custom domains → Set up a custom domain**: add `yourdomain.com`, then `www.yourdomain.com`. Cloudflare creates the DNS records and the HTTPS certificate.
+6. The admin panel is at `https://yourdomain.com/admin` (`/admin.html` also works).
+
+The `_headers` file sets security headers, hides `/admin` from search engines and makes sure fresh store data is always served.
+
+**Option B: GitHub Pages**
 1. On GitHub, open the repository → **Settings → Pages**.
 2. Under *Source*, choose the branch and the `/ (root)` folder, then save.
 3. A minute later the site is live at `https://<username>.github.io/elf-shop/`.
 
-**Option B: Netlify**: drag and drop the project folder on [app.netlify.com/drop](https://app.netlify.com/drop).
+**Option C: Netlify**: drag and drop the project folder on [app.netlify.com/drop](https://app.netlify.com/drop).
 
 You can connect your own domain (for example `theelfshop.com`) in either service.
 
