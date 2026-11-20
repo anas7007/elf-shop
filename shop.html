@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shop | The Elf Shop</title>
+  <meta name="description" content="Shop authentic Korean skincare, sheet masks, Korean snacks, K-pop and culture products.">
+  <meta name="theme-color" content="#0A0F5C">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Shop | The Elf Shop">
+  <meta property="og:description" content="Shop authentic Korean skincare, sheet masks, Korean snacks, K-pop and culture products.">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Noto+Sans+KR:wght@400;500;700;900&family=Outfit:wght@400;500;600;700;800;900&family=Yellowtail&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script>try{var l=JSON.parse(localStorage.getItem("elf_lang"));if(l&&l!=="ar"){document.documentElement.lang=l;document.documentElement.dir="ltr";document.documentElement.dataset.lang=l}}catch(e){}</script>
+</head>
+<body data-page="shop" data-title="nav.shop">
+  <div id="site-header"></div>
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <span class="eyebrow">K-Beauty · K-Food · K-Pop</span>
+        <h1 data-i18n="shop.title"></h1>
+        <p data-i18n="shop.sub"></p>
+      </div>
+    </section>
+    <section class="container" style="padding-bottom:40px">
+      <div class="shop-bar">
+        <label class="search-field"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="shop-q" type="search" data-i18n-ph="shop.search" autocomplete="off"></label>
+        <div class="select"><select id="shop-sort" data-i18n-aria="shop.sort"></select></div>
+        <label class="toggle"><input type="checkbox" id="shop-sale"><span data-i18n="shop.sale"></span></label>
+      </div>
+      <div class="chips" id="chips" role="toolbar"></div>
+      <div class="shop-meta"><h2 id="shop-title"></h2><span id="shop-count"></span></div>
+      <div class="grid" id="grid"></div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/i18n.js"></script>
+  <script src="assets/js/products.js"></script>
+  <script src="assets/js/art.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/pages.js"></script>
+</body>
+</html>
