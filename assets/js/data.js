@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-20T17:25:10.460Z",
+  "updatedAt": "2026-11-20T17:27:10.101Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -774,9 +774,7 @@ window.ELF_DATA = {
   ],
   "texts": {
     "ar": {},
-    "en": {
-      "hero.eyebrow": "Authentic from Korea since 2013 (test)"
-    },
+    "en": {},
     "ko": {}
   }
 };
