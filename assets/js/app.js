@@ -2,9 +2,6 @@
    THE ELF SHOP — CORE (shared by every page)
    ========================================================= */
 (function () {
-  const CFG = window.ELF_CONFIG;
-  const I18N = window.ELF_I18N;
-  const PRODUCTS = window.ELF_PRODUCTS;
   const LANGS = ["ar", "en", "ko"];
 
   /* ---------- safe storage ---------- */
@@ -12,6 +9,32 @@
     get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
     set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
   };
+
+  /* ---------- store data ----------
+     Normally the published assets/js/data.js. When the admin clicks
+     "Preview" in /admin.html, their unpublished draft is used instead
+     (only in their own browser). */
+  const draft = store.get("elf_admin_preview") ? store.get("elf_admin_draft") : null;
+  const PREVIEW = !!(draft && draft.settings && Array.isArray(draft.products));
+  const DATA = PREVIEW ? draft : window.ELF_DATA;
+  const CFG = DATA.settings;
+  const I18N = window.ELF_I18N;
+  const CATS = DATA.categories || [];
+  const PRODUCTS = (DATA.products || []).filter(p => !p.hidden && CATS.some(c => c.id === p.cat));
+  window.ELF_CONFIG = CFG;
+  window.ELF_REVIEWS = DATA.reviews || [];
+  LANGS.forEach(l => {
+    CATS.forEach(c => {
+      I18N[l]["cat." + c.id] = (c.name && (c.name[l] || c.name.en)) || c.id;
+      I18N[l]["cat." + c.id + ".d"] = (c.desc && (c.desc[l] || c.desc.en)) || "";
+    });
+    const over = (DATA.texts && DATA.texts[l]) || {};
+    Object.keys(over).forEach(k => { if (over[k]) I18N[l][k] = over[k]; });
+  });
+  const TH = DATA.theme || {};
+  [["blue", "--blue"], ["navy", "--navy"], ["gold", "--gold"]].forEach(([k, v]) => {
+    if (/^#[0-9a-f]{6}$/i.test(TH[k] || "")) document.documentElement.style.setProperty(v, TH[k]);
+  });
 
   /* ---------- language ---------- */
   function detectLang() {
@@ -149,7 +172,7 @@
     count: () => cart.reduce((s, i) => s + i.qty, 0),
     subtotal: () => Cart.items().reduce((s, i) => s + i.p.price * i.qty, 0),
     add(id, qty = 1, silent) {
-      const p = getProduct(id); if (!p) return;
+      const p = getProduct(id); if (!p || p.soldOut) return;
       const it = cart.find(i => i.id === id);
       if (it) it.qty = Math.min(99, it.qty + qty); else cart.push({ id, qty });
       saveCart();
@@ -213,6 +236,7 @@
   /* ---------- product card ---------- */
   function badges(p) {
     const b = [];
+    if (p.soldOut) b.push(`<span class="badge badge-out">${esc(t("badge.soldout"))}</span>`);
     if (p.oldPrice) b.push(`<span class="badge badge-sale" dir="ltr">-${Math.round((1 - p.price / p.oldPrice) * 100)}%</span>`);
     if ((p.tags || []).includes("new")) b.push(`<span class="badge badge-new">${esc(t("badge.new"))}</span>`);
     if ((p.tags || []).includes("best")) b.push(`<span class="badge badge-best">${icon("star")}${esc(t("badge.best"))}</span>`);
@@ -232,7 +256,7 @@
           <div class="price">${money(p.price)}${p.oldPrice ? `<s>${money(p.oldPrice)}</s>` : ""}</div>
           <div class="card-actions">
             <a class="icon-btn wa" href="${waLink(CFG.whatsappOrders, `${t("p.wa.msg")}\n• ${L(p.name)} — ${money(p.price)}\n${absUrl(productUrl(p))}`)}" target="_blank" rel="noopener" aria-label="${esc(t("p.wa"))}" title="${esc(t("p.wa"))}" data-wa="${p.id}">${icon("whatsapp")}</a>
-            <button class="icon-btn add" type="button" data-add="${p.id}" aria-label="${esc(t("p.add"))}" title="${esc(t("p.add"))}">${icon("bag")}</button>
+            <button class="icon-btn add" type="button" ${p.soldOut ? "disabled" : ""} data-add="${p.id}" aria-label="${esc(t("p.add"))}" title="${esc(t("p.add"))}">${icon("bag")}</button>
           </div>
         </div>
       </div>
@@ -292,7 +316,7 @@
         <nav class="mnav">
           ${navItems.map(([h, k, id]) => `<a href="${h}" class="${page === id ? "active" : ""}"><span data-i18n="${k}"></span>${icon("arrow", "flip")}</a>`).join("")}
         </nav>
-        <div class="mnav-cats">${["skincare", "sheetmask", "kitchen", "kpop", "culture", "accessories"].map(c => `<a href="shop.html?cat=${c}" data-i18n="cat.${c}"></a>`).join("")}</div>
+        <div class="mnav-cats">${CATS.map(c => c.id).map(c => `<a href="shop.html?cat=${c}" data-i18n="cat.${c}"></a>`).join("")}</div>
         <div class="mnav-foot">${langSwitch()}<div class="socials">${socialLinks("soc")}</div></div>
       </aside>
       <div class="search-pop" aria-hidden="true">
@@ -314,7 +338,7 @@
           </div>
           <div>
             <h4 data-i18n="footer.shop"></h4>
-            ${["skincare", "sheetmask", "kitchen", "kpop", "culture", "accessories"].map(c => `<a href="shop.html?cat=${c}" data-i18n="cat.${c}"></a>`).join("")}
+            ${CATS.map(c => c.id).map(c => `<a href="shop.html?cat=${c}" data-i18n="cat.${c}"></a>`).join("")}
           </div>
           <div>
             <h4 data-i18n="footer.help"></h4>
@@ -386,7 +410,7 @@
   }
   function leadPopup() {
     const P = CFG.leadPopup || {};
-    if (!P.enabled || store.get("elf_popup_seen") || store.get("elf_subscribed")) return;
+    if (!P.enabled || PREVIEW || store.get("elf_popup_seen") || store.get("elf_subscribed")) return;
     if (["checkout"].includes(document.body.dataset.page)) return;
     setTimeout(() => {
       if (document.querySelector(".drawer.open, .modal.open")) return;
@@ -438,7 +462,8 @@
     CFG, t, L, esc, money, icon, media, mediaCount, getProduct, productUrl, absUrl, waLink, productCard, badges,
     Cart, track, sendForm, toast, leadForm, observeReveals, applyLang, store,
     get lang() { return lang; },
-    get products() { return PRODUCTS; }
+    get products() { return PRODUCTS; },
+    cats: CATS, preview: PREVIEW
   };
 
   /* ---------- bind static links/text to config ---------- */
@@ -464,6 +489,14 @@
   captureAttribution();
   initPixel();
   leadPopup();
+  if (PREVIEW) {
+    const bar = document.createElement("div");
+    bar.className = "preview-bar"; bar.dir = "ltr";
+    bar.innerHTML = `<span>👁 <b>Preview mode</b> — you are seeing unpublished changes. Customers still see the live site.</span><a href="admin.html">Back to admin</a><button type="button">Exit preview</button>`;
+    bar.querySelector("button").onclick = () => { store.set("elf_admin_preview", false); location.reload(); };
+    document.body.appendChild(bar);
+    document.body.classList.add("previewing");
+  }
   document.addEventListener("DOMContentLoaded", () => observeReveals());
   if (document.readyState !== "loading") observeReveals();
 })();

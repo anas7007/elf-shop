@@ -14,6 +14,36 @@ There's no server, database or monthly fee. It's plain HTML/CSS/JS that can be h
 
 ---
 
+## 🛠️ Admin panel — `/admin.html`
+
+Open `https://your-site/admin.html` to manage the store without touching code:
+
+| Section | What you can do |
+|---|---|
+| **Dashboard** | Store overview, a launch checklist, and shortcuts to your orders, subscribers and inquiries in Gmail. |
+| **Products** | Add, edit, duplicate, reorder, hide or delete products. Set prices, sale prices, "Best seller" / "New" / "Sold out", and upload photos (resized automatically). |
+| **Categories** | Add, rename, reorder or delete shop categories. |
+| **Reviews** | Add real customer reviews and remove the placeholders. |
+| **Store settings** | WhatsApp numbers, InstaPay number, email, shipping fee, social links, Meta Pixel ID, newsletter pop-up, homepage featured products. |
+| **Site texts** | Change any wording on the site in Arabic, English and Korean. |
+| **Colors** | Change the three brand colors. |
+| **Publish** | Send your changes to the live site. |
+
+**How it works**
+1. Your edits are saved automatically as a **draft in your browser**. Customers don't see them yet.
+2. **Preview my changes** opens the real site showing your draft (only for you).
+3. **Publish** saves the changes to your GitHub repository; the live site updates in 1–2 minutes.
+
+**One-time setup: connect GitHub.** In the panel open **Publish**, follow "How do I get an access token?", paste the token and press **Save and test connection**. Set the branch to the one your site is published from.
+
+**Security.** The panel has no password of its own because the site has no server. What protects the store is the GitHub token: only a browser holding it can publish. Someone who opens `/admin.html` without the token can only change a private draft on their own device. Keep the token secret, and don't tick "Remember on this device" on a shared computer.
+
+**Orders** are not stored in the panel: they arrive by email and WhatsApp. The Dashboard links straight to them in Gmail.
+
+**No GitHub?** In **Publish** you can download `data.js` and replace `assets/js/data.js` in the site files yourself.
+
+---
+
 ## 📁 Project structure
 
 ```
@@ -23,15 +53,19 @@ product.html      Product page (gallery, description, how to use, add to cart, W
 checkout.html     Checkout (delivery form, COD / InstaPay, order confirmation)
 about.html        Our story
 contact.html      WhatsApp numbers, email, contact form, social links
+admin.html        ⭐ ADMIN PANEL
 assets/
-  css/style.css   All styles (colors at the top under :root)
-  js/config.js    ⭐ STORE SETTINGS — phones, email, Pixel ID, shipping
-  js/products.js  ⭐ PRODUCTS + REVIEWS — edit your catalog here
-  js/i18n.js      All texts in Arabic / English / Korean
+  js/data.js      ⭐ STORE DATA — settings, colors, categories, products, reviews, text changes
+                     (written by the admin panel)
+  js/i18n.js      Default texts in Arabic / English / Korean
   js/app.js       Core: header/footer, cart, language, Pixel, leads
   js/pages.js     Page logic
+  js/admin.js     Admin panel logic
   js/art.js       Illustrated placeholders shown until real photos are added
-  products/       Put your product photos here
+  js/geo.js       Egyptian governorates for checkout
+  css/style.css   Storefront styles
+  css/admin.css   Admin panel styles
+  products/       Product photos (the admin panel uploads here)
 ```
 
 ---
@@ -59,7 +93,7 @@ Orders, newsletter sign-ups and contact messages are sent to **tes.korea2013@gma
 2. FormSubmit sends an **activation email** to `tes.korea2013@gmail.com`. Click **Activate Form**.
 3. From then on, every order and lead arrives in Gmail as a neat table. Each one includes the customer's details and, if they came from an ad, the **ad source** (`utm_source`, `utm_campaign`, `fbclid`).
 
-> Tip: once it's activated, FormSubmit gives you a random alias. You can put it in `formEndpoint` in `config.js` so the email address doesn't appear in the page code.
+> Tip: once it's activated, FormSubmit gives you a random alias. You can put it in the admin panel (**Store settings → Form delivery address**) so the email address doesn't appear in the page code.
 
 Orders are also always sent to **WhatsApp**: the confirmation page has a "Send order on WhatsApp" button. So nothing is lost even if an email fails.
 
@@ -69,10 +103,7 @@ Orders are also always sent to **WhatsApp**: the confirmation page has a "Send o
 
 1. Go to **Meta Events Manager → Connect data sources → Web → Meta Pixel** and create a pixel.
 2. Copy the **Pixel ID** (a number like `123456789012345`).
-3. Paste it into `assets/js/config.js`:
-   ```js
-   metaPixelId: "123456789012345",
-   ```
+3. Paste it in the admin panel under **Store settings → Facebook ads (Meta Pixel)** and publish.
 4. Done. The site automatically sends these events:
 
 | Event | When |
@@ -103,42 +134,18 @@ Every newsletter sign-up arrives in Gmail with the person's **name, email and Wh
 - **Growing list (recommended):** use **[Brevo](https://brevo.com)** (free for up to 300 emails a day) or **[Mailchimp](https://mailchimp.com)** (free plan). Sign up with `tes.korea2013@gmail.com`, import your subscribers (copy them from the lead emails into a spreadsheet, then upload it as CSV), and design campaigns with ready-made templates. Both tools show who opened and clicked.
 - **WhatsApp offers:** use the phone numbers you collected with WhatsApp Business **broadcast lists**.
 
-The newsletter pop-up appears once per visitor after 25 seconds. You can change this in `config.js` (`leadPopup`).
+The newsletter pop-up appears once per visitor after 25 seconds. You can change this in the admin panel under **Store settings**.
 
 ---
 
-## 🛍️ 5. Adding products & photos
+## 🛍️ 5. Products, reviews and settings
 
-Open `assets/js/products.js`. Each product looks like this:
+Use the **admin panel** (`/admin.html`) — see the top of this file.
 
-```js
-{
-  id: "snail-mucin-essence",           // unique, used in the link
-  cat: "skincare",                     // skincare | sheetmask | kitchen | kpop | culture | accessories
-  price: 650, oldPrice: 780,           // oldPrice is optional and shows a "Sale" badge
-  tags: ["best"],                      // "best" = best seller on the homepage, "new" = New badge
-  size: "100 ml",
-  images: ["assets/products/snail-1.jpg", "assets/products/snail-2.jpg"],
-  name:  { ar: "...", en: "...", ko: "..." },
-  desc:  { ar: "...", en: "...", ko: "..." },
-  usage: { ar: "...", en: "...", ko: "..." }
-}
-```
-
-- **Photos:** put them in `assets/products/` and list them in `images`. Square photos (about 1000×1000) look best. While `images` is empty, a styled illustration is shown instead.
 - ⚠️ **The current products and prices are samples.** Replace them with your real stock.
-
-## ⭐ 6. Customer reviews
-
-At the bottom of `products.js`, `ELF_REVIEWS` contains **placeholders**. Copy real reviews from your Facebook page (the Reviews / Recommendations tab) into it, with the customer's name and city.
-
-## ⚙️ 7. Other settings (`config.js`)
-
-- `whatsappOrders`: the WhatsApp number that receives orders (`201144246362`).
-- `instapayNumber` / `whatsappPayments`: the InstaPay number and the WhatsApp number for payment screenshots (`01015044457`).
-- `shipping.flat`: set a fixed shipping fee (for example `60`). If you leave it as `null`, checkout shows "confirmed on WhatsApp".
-- `shipping.freeOver`: free shipping above this amount.
+- ⚠️ **The reviews are placeholders.** Replace them with real reviews from your Facebook page.
+- Until a product has a photo, a styled illustration is shown instead.
 
 ## 🎨 Colors
 
-The colors are defined at the top of `assets/css/style.css`: royal blue `#2230D9`, navy `#0A0F5C`, white, ink black `#0E0F1A` and gold `#C9A44C`.
+Royal blue `#2230D9`, navy `#0A0F5C`, white, ink black and gold `#C9A44C`. Change the three brand colors in the admin panel under **Colors**; all lighter and darker shades follow automatically.

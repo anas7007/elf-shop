@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin | The Elf Shop</title>
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Noto+Sans+KR:wght@400;700&family=Outfit:wght@400;500;600;700;800&family=Yellowtail&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/admin.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="side">
+      <a class="brand" href="#dashboard"><span class="mark">E</span><span><b>ELF</b> <i>Shop</i><small>Admin panel</small></span></a>
+      <nav id="nav"></nav>
+      <a class="side-link" href="index.html" target="_blank" rel="noopener">↗ Open live site</a>
+    </aside>
+    <div class="main">
+      <header class="top">
+        <div id="status" class="status"></div>
+        <div class="top-actions">
+          <button class="btn ghost" type="button" data-act="preview">👁 Preview my changes</button>
+          <a class="btn primary" href="#publish">Publish…</a>
+        </div>
+      </header>
+      <main id="view" class="view"></main>
+    </div>
+  </div>
+  <div id="toast" class="toast" role="status"></div>
+
+  <!-- cache-busted so the admin always starts from the newest published data -->
+  <script>document.write('<script src="assets/js/data.js?v=' + Date.now() + '"><\/script>');</script>
+  <script src="assets/js/i18n.js"></script>
+  <script src="assets/js/art.js"></script>
+  <script src="assets/js/admin.js"></script>
+</body>
+</html>

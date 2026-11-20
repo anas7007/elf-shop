@@ -4,15 +4,8 @@
 (function () {
   const E = window.ELF;
   const { t, L, esc, money, icon, CFG } = E;
-  const CATS = ["skincare", "sheetmask", "kitchen", "kpop", "culture", "accessories"];
-  const CAT_ART = {
-    skincare: { type: "bottle", c1: "#E8ECFF", c2: "#2B35D8", label: "K-BEAUTY" },
-    sheetmask: { type: "pouch", c1: "#E3F2FF", c2: "#2B6BD8", label: "MASK" },
-    kitchen: { type: "ramen", c1: "#FFE9E3", c2: "#D7261E", label: "K-FOOD" },
-    kpop: { type: "lightstick", c1: "#EEF0FF", c2: "#5B3FD8", label: "" },
-    culture: { type: "fan", c1: "#FFF3E8", c2: "#1E2BD6", label: "" },
-    accessories: { type: "clip", c1: "#F5F6FF", c2: "#C9A44C", label: "" }
-  };
+  const CATS = E.cats.map(c => c.id);
+  const CAT_ART = Object.fromEntries(E.cats.map(c => [c.id, c.art]));
   const $ = (s, r = document) => r.querySelector(s);
   const on = (fn) => { fn(); document.addEventListener("elf:lang", fn); };
 
@@ -31,6 +24,8 @@
 
       const offers = E.products.filter(p => p.oldPrice).slice(0, 4);
       $("#offers").innerHTML = offers.map(E.productCard).join("");
+      $("#offers").closest("section").hidden = !offers.length;
+      $("#reviews").closest("section").hidden = !window.ELF_REVIEWS.length;
 
       $("#reviews").innerHTML = window.ELF_REVIEWS.map((r, i) => `
         <figure class="review reveal" style="--d:${i * 80}ms">
@@ -40,7 +35,8 @@
         </figure>`).join("");
 
       // hero floating product cards
-      const heroP = ["snail-mucin-essence", "buldak-ramen-5", "kpop-album"].map(E.getProduct).filter(Boolean);
+      let heroP = (CFG.heroProducts || []).map(E.getProduct).filter(Boolean);
+      if (heroP.length < 3) heroP = heroP.concat(E.products.filter(p => !heroP.includes(p))).slice(0, 3);
       $("#hero-cards").innerHTML = heroP.map((p, i) => `
         <a class="hero-card hc${i + 1}" href="${E.productUrl(p)}">
           <div class="hc-media">${E.media(p)}</div>
@@ -132,7 +128,7 @@
                 <span>${qty}</span>
                 <button type="button" data-pq="1" aria-label="+">${icon("plus")}</button>
               </div>
-              <button type="button" class="btn btn-dark grow" id="pd-add">${icon("bag")}<span>${esc(t("p.add"))}</span></button>
+              <button type="button" class="btn btn-dark grow" id="pd-add" ${p.soldOut ? "disabled" : ""}>${icon("bag")}<span>${esc(t(p.soldOut ? "badge.soldout" : "p.add"))}</span></button>
             </div>
             <a class="btn btn-wa block lg" id="pd-wa" href="${E.waLink(CFG.whatsappOrders, waText())}" target="_blank" rel="noopener">${icon("whatsapp")}<span>${esc(t("p.wa"))}</span></a>
             <ul class="pd-perks">
