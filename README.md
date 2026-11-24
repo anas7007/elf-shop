@@ -21,10 +21,10 @@ Open `https://your-site/admin.html` to manage the store without touching code:
 | Section | What you can do |
 |---|---|
 | **Dashboard** | Store overview, a launch checklist, and shortcuts to your orders, subscribers and inquiries in Gmail. |
-| **Products** | Add, edit, duplicate, reorder, hide or delete products. Set prices, sale prices, "Best seller" / "New" / "Sold out", and upload photos (resized automatically). |
+| **Products** | Add, edit, duplicate, reorder, hide or delete products. Set prices, sale prices, "Best seller" / "New" / "Sold out", and upload photos (resized automatically). **Import from Excel / CSV** creates or updates many products at once. |
 | **Categories** | Add, rename, reorder or delete shop categories. |
-| **Reviews** | Add real customer reviews and remove the placeholders. |
-| **Store settings** | WhatsApp numbers, InstaPay number, email, shipping fee, social links, Meta Pixel ID, newsletter pop-up, homepage featured products. |
+| **Reviews** | **Fetch reviews from your Facebook page** and pick which ones to show, or add reviews by hand. Reviews appear on the homepage and on product pages. |
+| **Store settings** | WhatsApp numbers, InstaPay number, email, **shipping fees per governorate and the free-shipping amount**, social links, Meta Pixel ID, newsletter pop-up, homepage featured products. |
 | **Site texts** | Change any wording on the site in Arabic, English and Korean. |
 | **Colors** | Change the three brand colors. |
 | **Publish** | Send your changes to the live site. |
@@ -36,7 +36,40 @@ Open `https://your-site/admin.html` to manage the store without touching code:
 
 **One-time setup: connect GitHub.** In the panel open **Publish**, follow "How do I get an access token?", paste the token and press **Save and test connection**. Set the branch to the one your site is published from.
 
-**Security.** The panel has no password of its own because the site has no server. What protects the store is the GitHub token: only a browser holding it can publish. Someone who opens `/admin.html` without the token can only change a private draft on their own device. Keep the token secret, and don't tick "Remember on this device" on a shared computer.
+**Security.** `/admin` is locked with **Cloudflare Access** (Zero Trust → Access controls → Applications → "Elf Shop admin"): only the allowed emails can open it, after entering a one-time code sent by email. Publishing additionally needs the GitHub token, which is kept only in your browser. Keep the token secret, and don't tick "Remember on this device" on a shared computer.
+
+**Auto-translation (Arabic ↔ English).** Product names, descriptions, category names and reviews have **AR → EN / EN → AR** buttons, and typing in one language fills the other automatically when it's empty. The translation stays editable; auto-filled text is highlighted until you change it. It uses Cloudflare Workers AI through `functions/admin/api/translate.js` (free daily allowance; it only runs on the live site, behind the admin sign-in).
+
+### Import products from Excel or CSV
+**Products → ⇪ Import from Excel / CSV.** One product per row; the first row holds the column titles:
+
+| Column | Required | Notes |
+|---|---|---|
+| `Product Name` (or `اسم المنتج`) | ✅ | Arabic or English — the other language is translated automatically. Or use two columns `Name (Arabic)` / `Name (English)`. |
+| `Price` (or `السعر`) | ✅ | In EGP. `650`, `650 EGP`, `٦٥٠` and `1,250` all work. |
+| `Category` (or `القسم`) | ✅ | Matched with an existing category's name; unknown names create a new category. |
+| `Description`, `Old Price`, `Size`, `Image URL` | — | Optional. `Old Price` shows a Sale badge. |
+
+You see a preview first (new / updated / skipped rows and why). Products that already exist with the same name get their price, category and description updated. Nothing goes live until you **Publish**; then add photos to each product.
+
+### Facebook reviews — one-time setup
+1. Create an app at [developers.facebook.com/apps](https://developers.facebook.com/apps) (you must be an admin of the page).
+2. In the [Graph API Explorer](https://developers.facebook.com/tools/explorer/) get a **Page access token** with `pages_show_list` and `pages_read_user_content`, extend it to long-lived, and note your page's numeric ID (`me/accounts`).
+3. Cloudflare → **Workers & Pages → elf-shop → Settings → Variables and Secrets** → add the secrets `FB_PAGE_ID` and `FB_PAGE_TOKEN` (Production), then redeploy.
+4. Admin → **Reviews → Fetch reviews from Facebook**, tick the ones to show, **Add**, then **Publish**.
+
+The token stays on Cloudflare; visitors' browsers never see it and the storefront never calls Facebook.
+
+### Shipping (Egypt)
+Default rules: **Cairo & Alexandria 75 EGP**, **all other governorates 90 EGP**, **free shipping for orders above 2,000 EGP** (an order of exactly 2,000 still pays shipping). The cart and checkout show a bar with how much more to add for free shipping. Change any of this in **Store settings → Shipping (Egypt)**; you can set a special fee for any governorate.
+
+### Cloudflare settings this needs
+In **Workers & Pages → elf-shop → Settings**:
+- **Bindings:** a **Workers AI** binding named `AI` (for auto-translation).
+- **Variables:** `ACCESS_TEAM_DOMAIN` and `ACCESS_AUD` (optional but recommended — the admin API then verifies the Cloudflare Access sign-in token itself).
+- **Secrets:** `FB_PAGE_ID`, `FB_PAGE_TOKEN` (for Facebook reviews).
+
+`_routes.json` makes these functions run only for `/admin/api/*`; every other page is still served as plain static files.
 
 **Orders** are not stored in the panel: they arrive by email and WhatsApp. The Dashboard links straight to them in Gmail.
 
@@ -62,10 +95,16 @@ assets/
   js/pages.js     Page logic
   js/admin.js     Admin panel logic
   js/art.js       Illustrated placeholders shown until real photos are added
-  js/geo.js       Egyptian governorates for checkout
+  js/geo.js       Egyptian governorates for checkout (and shipping fees)
+  js/sheet.js     Reads .xlsx / .csv files for the admin import
   css/style.css   Storefront styles
   css/admin.css   Admin panel styles
   products/       Product photos (the admin panel uploads here)
+functions/admin/api/   Cloudflare Pages Functions, admin-only (behind Cloudflare Access)
+  _middleware.js  checks the admin sign-in on every API call
+  translate.js    Arabic ↔ English auto-translation (Workers AI)
+  facebook-reviews.js  reads the Facebook page's reviews (Graph API)
+_routes.json      run Functions only for /admin/api/*
 ```
 
 ---
@@ -157,7 +196,7 @@ The newsletter pop-up appears once per visitor after 25 seconds. You can change 
 Use the **admin panel** (`/admin.html`) — see the top of this file.
 
 - ⚠️ **The current products and prices are samples.** Replace them with your real stock.
-- ⚠️ **The reviews are placeholders.** Replace them with real reviews from your Facebook page.
+- ⚠️ **The reviews are placeholders.** Use **Reviews → Fetch reviews from Facebook** to replace them with real ones.
 - Until a product has a photo, a styled illustration is shown instead.
 
 ## 🎨 Colors

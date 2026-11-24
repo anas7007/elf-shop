@@ -27,12 +27,7 @@
       $("#offers").closest("section").hidden = !offers.length;
       $("#reviews").closest("section").hidden = !window.ELF_REVIEWS.length;
 
-      $("#reviews").innerHTML = window.ELF_REVIEWS.map((r, i) => `
-        <figure class="review reveal" style="--d:${i * 80}ms">
-          <div class="stars">${icon("star")}${icon("star")}${icon("star")}${icon("star")}${icon("star")}</div>
-          <blockquote>${esc(L(r.text))}</blockquote>
-          <figcaption><span class="avatar">${esc((r.name || "?").trim()[0])}</span><span><b>${esc(r.name)}</b><small>${esc(L(r.city))}</small></span></figcaption>
-        </figure>`).join("");
+      $("#reviews").innerHTML = window.ELF_REVIEWS.map(E.reviewCard).join("");
 
       // hero floating product cards
       let heroP = (CFG.heroProducts || []).map(E.getProduct).filter(Boolean);
@@ -108,6 +103,9 @@
     function render() {
       document.title = `${L(p.name)} | ${CFG.storeName}`;
       const n = E.mediaCount(p);
+      // reviews about this product first, then general store reviews (not ones about other products)
+      const allRevs = (window.ELF_REVIEWS || []).filter(r => !/^customer name$/i.test((r.name || "").trim())); // skip unfilled placeholders
+      const revs = allRevs.filter(r => r.product === p.id).concat(allRevs.filter(r => !r.product)).slice(0, 6);
       const related = E.products.filter(x => x.cat === p.cat && x.id !== p.id).concat(E.products.filter(x => x.cat !== p.cat && (x.tags || []).includes("best"))).slice(0, 4);
       root.innerHTML = `
         <nav class="crumbs"><a href="index.html">${esc(t("nav.home"))}</a><span>/</span><a href="shop.html?cat=${p.cat}">${esc(t("cat." + p.cat))}</a><span>/</span><b>${esc(L(p.name))}</b></nav>
@@ -139,10 +137,16 @@
             <div class="tabs" role="tablist">
               ${["desc", "usage", "delivery"].map(k => `<button type="button" role="tab" class="${tab === k ? "active" : ""}" data-tab="${k}" aria-selected="${tab === k}">${esc(t("p." + k))}</button>`).join("")}
             </div>
-            <div class="tab-panel" role="tabpanel">${esc(tab === "desc" ? L(p.desc) : tab === "usage" ? L(p.usage) : t("p.delivery.t"))}</div>
+            <div class="tab-panel" role="tabpanel">${tab === "delivery"
+              ? `<p>${esc(t("p.delivery.t"))}</p><ul class="ship-rules">${E.shippingRules().map(l => `<li>${icon("truck")}<span>${esc(l)}</span></li>`).join("")}</ul>`
+              : esc(tab === "desc" ? L(p.desc) : L(p.usage))}</div>
             <button type="button" class="link-btn" id="pd-share">${icon("share")}${esc(t("p.share"))}</button>
           </div>
         </div>
+        ${revs.length ? `<section class="section-sm pd-reviews">
+          <div class="sec-head"><h2>${esc(t("p.reviews"))}</h2><a class="link-btn" href="${esc(CFG.social.facebook)}" target="_blank" rel="noopener">${esc(t("reviews.more"))} →</a></div>
+          <div class="reviews">${revs.map(E.reviewCard).join("")}</div>
+        </section>` : ""}
         <section class="section-sm">
           <div class="sec-head"><h2>${esc(t("p.related"))}</h2></div>
           <div class="grid">${related.map(E.productCard).join("")}</div>
@@ -172,9 +176,10 @@
     let pay = "cod", done = null, initiated = false;
     const form = {};
 
+    const shipText = ship => ship == null ? t(form.gov ? "co.shipping.tbc" : "co.shipping.choose") : ship === 0 ? t("co.shipping.free") : money(ship);
     function summary() {
       const items = E.Cart.items();
-      const ship = E.Cart.shipping();
+      const ship = E.Cart.shipping(form.gov);
       const total = E.Cart.subtotal() + (ship || 0);
       return `
         <aside class="co-summary">
@@ -185,8 +190,9 @@
               <span>${esc(L(i.p.name))}</span>
               <strong>${money(i.p.price * i.qty)}</strong>
             </div>`).join("")}</div>
+          ${E.shipBar()}
           <div class="row-between"><span>${esc(t("cart.subtotal"))}</span><b>${money(E.Cart.subtotal())}</b></div>
-          <div class="row-between"><span>${esc(t("co.shipping"))}</span><b>${ship == null ? esc(t("co.shipping.tbc")) : ship === 0 ? esc(t("co.shipping.free")) : money(ship)}</b></div>
+          <div class="row-between"><span>${esc(t("co.shipping"))}${form.gov && ship != null ? ` <small class="muted">(${esc(E.govName(form.gov))})</small>` : ""}</span><b class="${ship == null ? "muted" : ""}">${esc(shipText(ship))}</b></div>
           <div class="row-between total"><span>${esc(t("co.total"))}</span><b>${money(total)}</b></div>
           <p class="form-note">${icon("shield")}<span>${esc(t("co.secure"))}</span></p>
         </aside>`;
@@ -270,11 +276,18 @@
       if (orderId) lines.push(`Order: ${orderId}`);
       if (form.name) lines.push(`${t("co.name")}: ${form.name}`);
       if (form.phone) lines.push(`${t("co.phone")}: ${form.phone}`);
-      if (form.gov || form.city) lines.push(`${t("co.gov")}: ${[form.gov, form.city].filter(Boolean).join(" — ")}`);
+      if (form.gov || form.city) lines.push(`${t("co.gov")}: ${[form.gov && E.govName(form.gov), form.city].filter(Boolean).join(" — ")}`);
       if (form.address) lines.push(`${t("co.address")}: ${form.address}`);
       if (form.notes) lines.push(`${t("co.notes")}: ${form.notes}`);
       lines.push(`${t("co.payment")}: ${pay === "cod" ? t("co.cod") : t("co.instapay")}`);
+      const ship = E.Cart.shipping(form.gov);
+      lines.push(`${t("co.shipping")}: ${shipText(ship)}`);
+      lines.push(`${t("co.total")}: ${money(E.Cart.subtotal() + (ship || 0))}`);
       return lines;
+    }
+    function refreshSummary() {
+      const old = $(".co-summary", root); if (!old) return;
+      old.outerHTML = summary();
     }
     function updateWa() {
       const a = $("#co-wa"); if (a) a.href = E.waLink(CFG.whatsappOrders, E.Cart.waText(orderLines()));
@@ -284,6 +297,7 @@
     root.addEventListener("change", e => {
       readForm();
       if (e.target.name === "pay") { pay = e.target.value; render(); }
+      else if (e.target.name === "gov") { refreshSummary(); updateWa(); }
     });
     root.addEventListener("click", async e => {
       const cp = e.target.closest("[data-copy]");
@@ -303,7 +317,8 @@
       const d = new Date();
       const orderId = `ELF-${String(d.getFullYear()).slice(2)}${String(d.getMonth() + 1).padStart(2, "0")}${String(d.getDate()).padStart(2, "0")}-${Math.floor(1000 + Math.random() * 9000)}`;
       const items = E.Cart.items();
-      const total = E.Cart.subtotal() + (E.Cart.shipping() || 0);
+      const ship = E.Cart.shipping(form.gov);
+      const total = E.Cart.subtotal() + (ship || 0);
       const btn = $("#co-submit"); btn.disabled = true; btn.querySelector("span").textContent = t("co.sending");
 
       const waText = E.Cart.waText(orderLines(orderId));
@@ -313,7 +328,7 @@
           governorate: form.gov, city: form.city, address: form.address, notes: form.notes || "-",
           payment: pay === "cod" ? "Cash on Delivery" : "InstaPay (awaiting screenshot)",
           items: items.map(i => `${i.p.name.en} (${i.p.id}) × ${i.qty} = ${i.p.price * i.qty} EGP`).join(" | "),
-          subtotal: E.Cart.subtotal() + " EGP", total: total + " EGP"
+          subtotal: E.Cart.subtotal() + " EGP", shipping: ship == null ? "To confirm" : ship === 0 ? "Free (0 EGP)" : ship + " EGP", total: total + " EGP"
         });
       } catch (err) { /* email is best-effort — WhatsApp step below still completes the order */ }
 

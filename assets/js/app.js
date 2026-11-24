@@ -22,6 +22,9 @@
   const CATS = DATA.categories || [];
   const PRODUCTS = (DATA.products || []).filter(p => !p.hidden && CATS.some(c => c.id === p.cat));
   window.ELF_CONFIG = CFG;
+  /* Shipping rules (EGP). Older data files have no rules yet, so they get the store's standard rates. */
+  const SHIP_DEFAULT = { v: 2, defaultFee: 90, rates: { Cairo: 75, Alexandria: 75 }, freeAbove: 2000 };
+  const SHIP = (CFG.shipping && CFG.shipping.v === 2) ? Object.assign({ rates: {} }, CFG.shipping) : SHIP_DEFAULT;
   window.ELF_REVIEWS = DATA.reviews || [];
   LANGS.forEach(l => {
     CATS.forEach(c => {
@@ -182,11 +185,20 @@
     set(id, qty) { const it = cart.find(i => i.id === id); if (!it) return; it.qty = Math.max(1, Math.min(99, qty)); saveCart(); },
     remove(id) { cart = cart.filter(i => i.id !== id); saveCart(); },
     clear() { cart = []; saveCart(); },
-    shipping() {
-      const s = CFG.shipping || {};
-      if (s.flat == null) return null;
-      if (s.freeOver != null && Cart.subtotal() >= s.freeOver) return 0;
-      return s.flat;
+    /* Shipping fee for a governorate (English name from geo.js).
+       0 = free, null = governorate not chosen yet / fee not configured. */
+    shipping(gov) {
+      const s = SHIP;
+      if (s.freeAbove != null && Cart.subtotal() > s.freeAbove) return 0;
+      if (!gov) return null;
+      const fee = s.rates[gov] != null ? s.rates[gov] : s.defaultFee;
+      return fee == null ? null : Number(fee);
+    },
+    /* Progress towards free shipping, or null when there is no free-shipping rule. */
+    freeShipping() {
+      const s = SHIP; if (s.freeAbove == null) return null;
+      const sub = Cart.subtotal(); const unlocked = sub > s.freeAbove;
+      return { unlocked, remaining: unlocked ? 0 : Math.floor(s.freeAbove) + 1 - sub, pct: unlocked ? 100 : Math.min(100, Math.round(sub / s.freeAbove * 100)) };
     },
     waText(extraLines) {
       const lines = [t("cart.wa.msg"), ""];
@@ -196,6 +208,26 @@
       return lines.join("\n");
     }
   };
+  /* "Add 300 EGP more for free shipping" bar (cart drawer + checkout) */
+  function shipBar() {
+    const f = Cart.freeShipping(); if (!f) return "";
+    const txt = f.unlocked ? t("ship.unlocked") : t("ship.more").replace("{amount}", money(f.remaining));
+    return `<div class="ship-bar ${f.unlocked ? "done" : ""}" role="status">
+      <p>${icon(f.unlocked ? "check" : "truck")}<span>${esc(txt)}</span></p>
+      <div class="ship-track" aria-hidden="true"><span style="width:${f.pct}%"></span></div>
+    </div>`;
+  }
+  /* Human-readable shipping rules, e.g. ["Cairo & Alexandria: EGP 75", "Other governorates: EGP 90", "Free shipping on orders above EGP 2,000"] */
+  const govName = en => { const g = (window.ELF_GOVERNORATES || []).find(x => x[1] === en); return g ? (lang === "ar" ? g[0] : g[1]) : en; };
+  const joinList = arr => { try { return new Intl.ListFormat(lang, { type: "conjunction" }).format(arr); } catch (e) { return arr.join(", "); } };
+  function shippingRules() {
+    const s = SHIP; const lines = []; const byFee = {};
+    Object.keys(s.rates).forEach(g => { const f = s.rates[g]; if (f != null && f !== s.defaultFee) (byFee[f] = byFee[f] || []).push(govName(g)); });
+    Object.keys(byFee).sort((a, b) => a - b).forEach(f => lines.push(`${joinList(byFee[f])}: ${money(f)}`));
+    if (s.defaultFee != null) lines.push(`${t(lines.length ? "ship.others" : "ship.all")}: ${money(s.defaultFee)}`);
+    if (s.freeAbove != null) lines.push(t("ship.free.rule").replace("{amount}", money(s.freeAbove)));
+    return lines;
+  }
   function bumpCart() {
     document.querySelectorAll(".cart-btn").forEach(b => { b.classList.remove("bump"); void b.offsetWidth; b.classList.add("bump"); });
   }
@@ -229,6 +261,7 @@
           </div>
         </div>
       </div>`).join("");
+    foot.querySelector("[data-ship-bar]").innerHTML = shipBar();
     foot.querySelector("[data-subtotal]").textContent = money(Cart.subtotal());
     foot.querySelector("[data-cart-wa]").href = waLink(CFG.whatsappOrders, Cart.waText());
   }
@@ -261,6 +294,29 @@
         </div>
       </div>
     </article>`;
+  }
+
+  /* ---------- review card (homepage + product page) ---------- */
+  const FB_URL = /^https:\/\/([a-z0-9-]+\.)?(facebook\.com|fb\.com|fb\.me)\//i;
+  function reviewCard(r, i = 0) {
+    const fb = r.source === "facebook";
+    const rating = Number(r.rating) || 0;
+    const top = rating
+      ? `<div class="stars" aria-label="${rating}/5">${[1, 2, 3, 4, 5].map(n => icon("star", n <= rating ? "" : "off")).join("")}</div>`
+      : fb ? `<span class="rv-rec">${icon("star")}${esc(t("reviews.rec"))}</span>`
+      : `<div class="stars">${icon("star").repeat(5)}</div>`;
+    const src = !fb ? "" : FB_URL.test(r.url || "")
+      ? `<a class="rv-src" href="${esc(r.url)}" target="_blank" rel="noopener nofollow">${icon("facebook")}${esc(t("reviews.fb"))}</a>`
+      : `<span class="rv-src">${icon("facebook")}${esc(t("reviews.fb"))}</span>`;
+    let when = "";
+    if (r.date) { const d = new Date(r.date); if (!isNaN(d)) { try { when = d.toLocaleDateString(lang === "ar" ? "ar-EG" : lang, { month: "short", year: "numeric" }); } catch (e) {} } }
+    const sub = [L(r.city), when].filter(Boolean).join(" · ");
+    return `
+      <figure class="review reveal" style="--d:${i * 80}ms">
+        <div class="rv-top">${top}${src}</div>
+        <blockquote>${esc(L(r.text))}</blockquote>
+        <figcaption><span class="avatar">${esc((r.name || "?").trim()[0] || "?")}</span><span><b>${esc(r.name)}</b>${sub ? `<small>${esc(sub)}</small>` : ""}</span></figcaption>
+      </figure>`;
   }
 
   /* ---------- layout: header / footer / drawers ---------- */
@@ -306,6 +362,7 @@
         <div class="drawer-head"><h2 data-i18n="cart.title"></h2><button class="icon-btn ghost" type="button" data-close aria-label="close">${icon("close")}</button></div>
         <div class="drawer-body"></div>
         <div class="drawer-foot" hidden>
+          <div data-ship-bar></div>
           <div class="row-between"><span data-i18n="cart.subtotal"></span><strong data-subtotal></strong></div>
           <a class="btn btn-gold block" href="checkout.html"><span data-i18n="cart.checkout"></span>${icon("arrow", "flip")}</a>
           <a class="btn btn-wa block" data-cart-wa target="_blank" rel="noopener">${icon("whatsapp")}<span data-i18n="cart.wa"></span></a>
@@ -460,7 +517,7 @@
   /* ---------- public API ---------- */
   window.ELF = {
     CFG, t, L, esc, money, icon, media, mediaCount, getProduct, productUrl, absUrl, waLink, productCard, badges,
-    Cart, track, sendForm, toast, leadForm, observeReveals, applyLang, store,
+    Cart, track, sendForm, toast, leadForm, observeReveals, applyLang, store, shipBar, shippingRules, govName, reviewCard,
     get lang() { return lang; },
     get products() { return PRODUCTS; },
     cats: CATS, preview: PREVIEW

@@ -158,6 +158,23 @@ code { background: var(--blue-50); border-radius: 6px; padding: 1px 6px; font-si
 .toast.show { transform: translate(-50%, 0); visibility: visible; transition: transform .35s cubic-bezier(.2, .8, .2, 1), visibility 0s; }
 .toast.err { background: var(--bad); }
 
+
+/* ---------- auto-translation ---------- */
+.tri > .lbl { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.tr-acts { display: inline-flex; gap: 6px; }
+.tr-btn { font: 700 11.5px/1 inherit; font-family: inherit; padding: 5px 9px; border-radius: 999px; border: 1.5px solid var(--line); background: #fff; color: var(--blue); cursor: pointer; }
+.tr-btn:hover { border-color: var(--blue); background: var(--blue-50); }
+.tr-note { color: var(--muted); font-size: 12px; margin-top: -2px; }
+.tr-auto { background: #F3F6FF !important; border-color: #A9B4F5 !important; }
+.tr-busy { background: repeating-linear-gradient(90deg, #fff 0 12px, var(--blue-50) 12px 24px) !important; background-size: 200% 100% !important; animation: tr-busy 1s linear infinite; }
+@keyframes tr-busy { to { background-position: -48px 0; } }
+/* ---------- import + facebook ---------- */
+.muted-row td { opacity: .55; }
+.ok-note { background: var(--ok-bg); color: #0B5C31; }
+.ok-note a { font-weight: 700; margin-inline-start: 8px; }
+details summary { cursor: pointer; }
+details.gov-fees { border-top: 1px solid var(--line); padding-top: 12px; }
+
 @media (max-width: 960px) {
   .app { grid-template-columns: 1fr; }
   .side { position: static; height: auto; flex-direction: row; align-items: center; padding: 10px 12px; gap: 10px; overflow-x: auto; }

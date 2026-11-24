@@ -38,13 +38,21 @@
   function normalize(d) {
     d.settings = d.settings || {};
     const s = d.settings;
-    s.social = s.social || {}; s.shipping = s.shipping || { flat: null, freeOver: null };
+    s.social = s.social || {};
+    // shipping v2: a fee per governorate (EGP) + free shipping above a subtotal. Older files get the store's standard rates.
+    if (!s.shipping || s.shipping.v !== 2) s.shipping = { v: 2, defaultFee: 90, rates: { Cairo: 75, Alexandria: 75 }, freeAbove: 2000 };
+    s.shipping.rates = s.shipping.rates || {};
     s.leadPopup = s.leadPopup || { enabled: true, delaySeconds: 25 };
     s.currency = s.currency || { ar: "ج.م", en: "EGP", ko: "EGP" };
     s.heroProducts = s.heroProducts || [];
     d.theme = d.theme || {}; d.categories = d.categories || []; d.products = d.products || []; d.reviews = d.reviews || [];
     d.texts = d.texts || {}; LANGS.forEach(([l]) => (d.texts[l] = d.texts[l] || {}));
-    d.products.forEach(p => { p.images = p.images || []; p.tags = p.tags || []; p.art = p.art || { type: "bottle", c1: "#EEF0FF", c2: "#2B35D8", label: "" }; });
+    const tri3 = o => Object.assign({ ar: "", en: "", ko: "" }, o || {});
+    d.products.forEach(p => {
+      p.images = p.images || []; p.tags = p.tags || []; p.art = p.art || { type: "bottle", c1: "#EEF0FF", c2: "#2B35D8", label: "" };
+      p.name = tri3(p.name); p.desc = tri3(p.desc); p.usage = tri3(p.usage);
+    });
+    d.reviews.forEach(r => { r.city = tri3(r.city); r.text = tri3(r.text); });
     return d;
   }
   let base = window.ELF_DATA;
@@ -75,10 +83,54 @@
     const v = getPath(data, path);
     return `<label class="f"><span>${label}</span><input data-path="${path}" ${o.kind ? `data-kind="${o.kind}"` : ""} type="${o.type || "text"}" value="${esc(v == null ? "" : v)}" placeholder="${esc(o.ph || "")}" ${o.attrs || ""}>${o.hint ? `<small>${o.hint}</small>` : ""}</label>`;
   };
-  const tri = (label, path, rows) => `<div class="tri"><span class="lbl">${label}</span><div class="tri-row">${LANGS.map(([l]) => {
-    const v = esc(getPath(data, path + "." + l) || ""); const dir = l === "ar" ? 'dir="rtl"' : "";
-    return `<div class="tri-f"><span class="tag">${l.toUpperCase()}</span>${rows ? `<textarea data-path="${path}.${l}" rows="${rows}" ${dir}>${v}</textarea>` : `<input data-path="${path}.${l}" value="${v}" ${dir}>`}</div>`;
-  }).join("")}</div></div>`;
+  // fields whose Arabic ↔ English text is translated automatically
+  const TR_PATHS = /^(products\.\d+\.(name|desc|usage)|categories\.\d+\.(name|desc)|reviews\.\d+\.(text|city))$/;
+  const autoTranslated = new Set(); // "path.lang" filled by the translator in this session (highlighted until edited)
+  const tri = (label, path, rows) => {
+    const tr = TR_PATHS.test(path);
+    return `<div class="tri"><span class="lbl">${label}${tr ? `<span class="tr-acts"><button type="button" class="tr-btn" data-act="tr" data-path="${path}" data-from="ar" data-to="en" title="Translate the Arabic text into English">AR → EN</button><button type="button" class="tr-btn" data-act="tr" data-path="${path}" data-from="en" data-to="ar" title="Translate the English text into Arabic">EN → AR</button></span>` : ""}</span><div class="tri-row">${LANGS.map(([l]) => {
+      const v = esc(getPath(data, path + "." + l) || ""); const dir = l === "ar" ? 'dir="rtl"' : "";
+      const auto = autoTranslated.has(`${path}.${l}`) ? ' class="tr-auto" title="Translated automatically — check it and edit if needed"' : "";
+      return `<div class="tri-f"><span class="tag">${l.toUpperCase()}</span>${rows ? `<textarea data-path="${path}.${l}" rows="${rows}" ${dir}${auto}>${v}</textarea>` : `<input data-path="${path}.${l}" value="${v}" ${dir}${auto}>`}</div>`;
+    }).join("")}</div>${tr ? `<small class="tr-note">Write in Arabic or English — the other language is filled in automatically and stays editable.</small>` : ""}</div>`;
+  };
+
+  /* ---------- auto-translation (Cloudflare Workers AI via /admin/api/translate) ---------- */
+  const LNAME = { ar: "Arabic", en: "English", ko: "Korean" };
+  const hasArabic = s => /[؀-ۿ]/.test(String(s || ""));
+  async function translate(texts, from, to) {
+    const out = [];
+    for (let i = 0; i < texts.length; i += 20) {
+      let res;
+      try {
+        res = await fetch("/admin/api/translate", { method: "POST", credentials: "same-origin", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ from, to, texts: texts.slice(i, i + 20) }) });
+      } catch (e) { throw new Error("Auto-translate couldn't be reached. Your admin sign-in may have expired — reload the page and sign in again."); }
+      const j = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        if (!j.error && [404, 405, 501].includes(res.status)) throw new Error("Auto-translate only works on the live site (elfshop.net/admin), not on this copy.");
+        throw new Error(j.error || `Auto-translate failed (error ${res.status}).`);
+      }
+      out.push(...(j.translations || []));
+    }
+    return out;
+  }
+  async function translateField(path, from, to, auto) {
+    const src = String(getPath(data, `${path}.${from}`) || "").trim();
+    if (!src) { if (!auto) toast(`Write the ${LNAME[from]} text first.`, true); return; }
+    const target = document.querySelector(`[data-path="${path}.${to}"]`);
+    if (target) target.classList.add("tr-busy");
+    try {
+      const [out] = await translate([src], from, to);
+      if (!out) throw new Error("The translator returned nothing — please type it yourself.");
+      if (auto && String(getPath(data, `${path}.${to}`) || "").trim()) return; // typed by hand meanwhile — keep theirs
+      setPath(data, `${path}.${to}`, out); autoTranslated.add(`${path}.${to}`); save();
+      const el = document.querySelector(`[data-path="${path}.${to}"]`);
+      if (el) { el.value = out; el.classList.add("tr-auto"); el.title = "Translated automatically — check it and edit if needed"; }
+      if (live) live();
+      nameProductFromEnglish(path);
+    } catch (e) { toast(e.message, true); }
+    finally { const el = document.querySelector(`[data-path="${path}.${to}"]`); if (el) el.classList.remove("tr-busy"); }
+  }
   const check = (label, path) => `<label class="check"><input type="checkbox" data-path="${path}" ${getPath(data, path) ? "checked" : ""}>${label}</label>`;
   const artEditor = path => {
     const a = getPath(data, path) || {};
@@ -89,6 +141,17 @@
       <label class="f"><span>Label text</span><input data-path="${path}.label" value="${esc(a.label || "")}" maxlength="10"></label>
     </div>`;
   };
+
+  /* ---------- shipping summary (settings + dashboard) ---------- */
+  function shippingSummary() {
+    const s = data.settings.shipping; const groups = {};
+    Object.keys(s.rates).forEach(g => { const f = s.rates[g]; if (f != null && f !== s.defaultFee) (groups[f] = groups[f] || []).push(g); });
+    const parts = Object.keys(groups).sort((a, b) => a - b).map(f => `${groups[f].join(" & ")}: ${f} EGP`);
+    if (s.defaultFee != null) parts.push(`${parts.length ? "Other governorates" : "All governorates"}: ${s.defaultFee} EGP`);
+    parts.push(s.freeAbove != null ? `Free shipping above ${Number(s.freeAbove).toLocaleString("en-US")} EGP` : "No free shipping");
+    return parts.join(" · ");
+  }
+  const govCountText = () => { const n = Object.values(data.settings.shipping.rates).filter(v => v != null).length; return n ? `(${n} set)` : "(none — every governorate uses the standard fee)"; };
 
   /* ---------- navigation ---------- */
   const ICON = {
@@ -106,7 +169,7 @@
   const route = () => { const [name, arg] = (location.hash.slice(1) || "dashboard").split("/"); return { name, arg: arg ? decodeURIComponent(arg) : "" }; };
 
   function refreshChrome() {
-    const r = route(); const active = r.name === "product" ? "products" : r.name;
+    const r = route(); const active = r.name === "product" || r.name === "import" ? "products" : r.name;
     const counts = { products: data.products.length, categories: data.categories.length, reviews: data.reviews.length };
     $("#nav").innerHTML = NAV.map(([id, label]) => `<a href="#${id}" class="${active === id ? "active" : ""}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICON[id]}</svg>${label}${counts[id] != null ? `<span class="n">${counts[id]}</span>` : ""}</a>`).join("");
     const d = isDirty(); const st = $("#status");
@@ -142,7 +205,7 @@
           ${chk(noPhoto === 0, "Product photos", noPhoto ? `${noPhoto} of ${visible.length} visible products still use an illustration instead of a real photo.` : "Every visible product has a photo.", "#products", "Products")}
           ${chk(placeholderReviews === 0, "Real customer reviews", placeholderReviews ? `${placeholderReviews} review(s) are still placeholders. Replace them with reviews from your Facebook page.` : "No placeholder reviews left.", "#reviews", "Reviews")}
           ${chk(!!s.metaPixelId, "Facebook (Meta) Pixel", s.metaPixelId ? "Pixel ID is set — ad tracking is active." : "No Pixel ID yet. Add it to track ads and build audiences.", "#settings", "Settings")}
-          ${chk(s.shipping.flat != null, "Shipping fee", s.shipping.flat != null ? `Fixed fee: ${s.shipping.flat} EGP.` : 'Not set — checkout shows "confirmed on WhatsApp". This is optional.', "#settings", "Settings")}
+          ${chk(s.shipping.defaultFee != null, "Shipping fees", s.shipping.defaultFee != null ? shippingSummary() : 'No standard fee — checkout shows "confirmed on WhatsApp" for most governorates.', "#settings", "Settings")}
           ${chk(connected, "Publishing connection", connected ? "Connected to GitHub — you can publish from this browser." : "Connect to GitHub once so the Publish button can update the live site.", "#publish", "Publish")}
         </ul>
       </div>
@@ -180,7 +243,8 @@
   }
   views.products = () => `
     <div class="head"><div><h1>Products</h1><p>Add, edit, hide or delete products. The order here is the order customers see in the shop.</p></div>
-      <button class="btn primary" data-act="p-add">+ Add product</button></div>
+      <div class="links"><a class="btn" href="#import">⇪ Import from Excel / CSV</a><button class="btn primary" data-act="p-add">+ Add product</button></div></div>
+    ${state.impResult ? `<div class="note ok-note">${state.impResult} <a href="#" data-act="imp-dismiss">Dismiss</a></div>` : ""}
     <div class="card">
       <div class="bar">
         <input type="search" placeholder="Search products…" data-filter="q" value="${esc(state.q)}">
@@ -240,6 +304,215 @@
       </div>`;
   };
 
+  /* ---------- Bulk import (Excel / CSV) ---------- */
+  const IMP_COLS = [
+    // [key, label, header pattern] — first match wins, so specific columns come before general ones
+    ["nameAr", "Name (Arabic)", /((name|title|product)\s*\(?\s*(ar|arabic)\b)|((arabic|عرب).*(name|اسم))|((اسم|الاسم).*(عرب|بالعربي))/i],
+    ["nameEn", "Name (English)", /((name|title|product)\s*\(?\s*(en|english)\b)|((english|انجليز|إنجليز).*(name|اسم))|((اسم|الاسم).*(انجليز|إنجليز|english))/i],
+    ["oldPrice", "Old price", /((old|before|compare|original|regular).*price)|(price.*(before|old))|(السعر\s*(القديم|قبل))|(قبل\s*الخصم)/i],
+    ["name", "Product name", /(name|product|item|title|اسم|المنتج|الصنف)/i],
+    ["price", "Price", /(price|cost|سعر|ثمن)/i],
+    ["cat", "Category", /(categ|catalog|type|collection|section|قسم|فئة|تصنيف|نوع|كتالوج)/i],
+    ["desc", "Description", /(desc|details|وصف|تفاصيل)/i],
+    ["size", "Size", /(size|weight|volume|حجم|وزن|مقاس)/i],
+    ["image", "Image URL", /(image|photo|picture|صورة|صور)/i]
+  ];
+  const toNumber = v => {
+    if (typeof v === "number") return v;
+    let s = String(v || "").replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[۰-۹]/g, d => "۰۱۲۳۴۵۶۷۸۹".indexOf(d))
+      .replace(/٫/g, ".").replace(/٬/g, ",").replace(/[^\d.,]/g, "");
+    // "1.250,50" or "12,5" → European decimal comma; "1,250" / "1,250.50" → thousands comma
+    if (/^\d{1,3}(\.\d{3})+,\d{1,2}$/.test(s) || /^\d+,\d{1,2}$/.test(s)) s = s.replace(/\./g, "").replace(",", ".");
+    else s = s.replace(/,/g, "");
+    return s && !isNaN(s) ? Math.round(Number(s) * 100) / 100 : NaN;
+  };
+  const norm = s => String(s == null ? "" : s).trim().toLowerCase().replace(/\s+/g, " ");
+  function findCategory(label) {
+    const n = norm(label); if (!n) return null;
+    return data.categories.find(c => [c.id, c.name.en, c.name.ar, c.name.ko].some(x => norm(x) === n) || slugify(c.name.en) === slugify(label)) || null;
+  }
+  function findProduct(names) {
+    const ns = names.map(norm).filter(Boolean);
+    return data.products.find(p => [p.name.en, p.name.ar].some(x => x && ns.includes(norm(x)))) || null;
+  }
+  async function loadSheet(file) {
+    if (!file) return;
+    state.imp = null; state.impError = "";
+    try {
+      const rows = (await window.ELF_SHEET.read(file)).filter(r => r.some(c => String(c).trim() !== ""));
+      if (!rows.length) throw new Error("The file is empty.");
+      // find the column for each field from the header row
+      const header = rows[0].map(h => String(h).trim());
+      const map = {};
+      header.forEach((h, i) => {
+        if (!h) return;
+        const hit = IMP_COLS.find(([key, , re]) => map[key] == null && re.test(h));
+        if (hit) map[hit[0]] = i;
+      });
+      let body = rows.slice(1);
+      if (map.name == null && map.nameAr == null && map.nameEn == null) {
+        // no recognisable header: assume the columns are Name, Price, Category
+        if (isNaN(toNumber(rows[0][1]))) throw new Error("Couldn't find a “Product Name” column. The first row must be the column titles: Product Name, Price, Category.");
+        Object.assign(map, { name: 0, price: 1, cat: 2 }); body = rows;
+      }
+      state.imp = { file: file.name, header, map, rows: body, opts: { update: true, visible: true, translate: true } };
+    } catch (e) { state.impError = e.message || "Couldn't read this file."; }
+    render();
+  }
+  // turn the sheet rows into a list of actions (create / update / skip) without changing anything yet
+  function importPlan() {
+    const { map, rows, opts } = state.imp; const cell = (r, k) => (map[k] == null ? "" : r[map[k]]);
+    const newCats = {}; const seen = new Set();
+    const plan = rows.map((r, n) => {
+      const name = String(cell(r, "name") || "").trim();
+      const ar = String(cell(r, "nameAr") || "").trim() || (hasArabic(name) ? name : "");
+      const en = String(cell(r, "nameEn") || "").trim() || (name && !hasArabic(name) ? name : "");
+      const price = toNumber(cell(r, "price"));
+      const oldRaw = cell(r, "oldPrice"); const oldPrice = String(oldRaw).trim() === "" ? null : toNumber(oldRaw);
+      const catLabel = String(cell(r, "cat") || "").trim();
+      const desc = String(cell(r, "desc") || "").trim(); const size = String(cell(r, "size") || "").trim();
+      const images = String(cell(r, "image") || "").split(/[|;\s]+/).filter(u => /^https?:\/\//i.test(u));
+      const item = { row: r.n || n + 2, ar, en, price, oldPrice, catLabel, desc, size, images };
+      if (!ar && !en) return Object.assign(item, { action: "skip", why: "No product name" });
+      if (isNaN(price) || price < 0) return Object.assign(item, { action: "skip", why: `Price “${cell(r, "price")}” is not a number` });
+      if (oldPrice != null && (isNaN(oldPrice) || oldPrice <= price)) item.oldPrice = null;
+      const key = norm(ar || en);
+      if (seen.has(key)) return Object.assign(item, { action: "skip", why: "Same name as an earlier row" });
+      seen.add(key);
+      const cat = catLabel ? findCategory(catLabel) : (data.categories[0] || null);
+      if (cat) item.cat = cat.id;
+      else { item.newCat = catLabel; newCats[norm(catLabel)] = catLabel; }
+      const existing = findProduct([ar, en]);
+      if (existing) return Object.assign(item, opts.update ? { action: "update", product: existing } : { action: "skip", why: "Already in the shop (updating is turned off)" });
+      return Object.assign(item, { action: "create" });
+    });
+    plan.newCats = Object.values(newCats);
+    return plan;
+  }
+  views.import = () => {
+    const imp = state.imp;
+    let preview = "";
+    if (imp) {
+      const plan = importPlan();
+      const c = k => plan.filter(x => x.action === k).length;
+      const colInfo = IMP_COLS.filter(([k]) => imp.map[k] != null).map(([k, label]) => `${label} → <b>${esc(imp.header[imp.map[k]] || "column " + (imp.map[k] + 1))}</b>`).join(" · ");
+      preview = `
+      <div class="card"><h2>2. Check before importing</h2>
+        <p class="sub">File <b>${esc(imp.file)}</b> · ${imp.rows.length} row(s). Columns found: ${colInfo}</p>
+        <div class="links" style="margin-bottom:14px"><span class="chip">${c("create")} new</span><span class="chip gold">${c("update")} update</span>${plan.newCats.length ? `<span class="chip">${plan.newCats.length} new categor${plan.newCats.length === 1 ? "y" : "ies"}: ${esc(plan.newCats.join(", "))}</span>` : ""}${c("skip") ? `<span class="chip red">${c("skip")} skipped</span>` : ""}</div>
+        <div class="checkrow" style="margin-bottom:14px">
+          <label class="check"><input type="checkbox" data-imp-opt="update" ${imp.opts.update ? "checked" : ""}>Update products that already exist (same name): price, category, description</label>
+          <label class="check"><input type="checkbox" data-imp-opt="visible" ${imp.opts.visible ? "checked" : ""}>Show new products on the site right away</label>
+          <label class="check"><input type="checkbox" data-imp-opt="translate" ${imp.opts.translate ? "checked" : ""}>Translate names and descriptions into the other language</label>
+        </div>
+        <div class="table-wrap"><table class="tbl"><thead><tr><th>Row</th><th>Name</th><th>Price</th><th>Category</th><th>Result</th></tr></thead><tbody>
+          ${plan.map(x => `<tr class="${x.action === "skip" ? "muted-row" : ""}"><td class="num">${x.row}</td><td><b>${esc(x.en || "")}</b><small dir="rtl" style="display:block">${esc(x.ar || "")}</small></td>
+            <td class="num">${isNaN(x.price) ? "—" : x.price.toLocaleString("en-US") + " EGP"}${x.oldPrice ? `<br><small><s>${x.oldPrice.toLocaleString("en-US")}</s></small>` : ""}</td>
+            <td>${x.cat ? esc(catName(x.cat)) : x.newCat ? `${esc(x.newCat)} <span class="chip">new</span>` : "—"}</td>
+            <td>${x.action === "create" ? '<span class="chip">New product</span>' : x.action === "update" ? `<span class="chip gold">Update</span> <small>${esc(x.product.name.en || x.product.name.ar)}</small>` : `<span class="chip red">Skipped</span> <small>${esc(x.why)}</small>`}</td></tr>`).join("")}
+        </tbody></table></div>
+        <div class="bar" style="margin-top:16px"><button class="btn primary lg" data-act="imp-run" ${c("create") + c("update") ? "" : "disabled"}>Import ${c("create") + c("update")} product(s)</button><button class="btn" data-act="imp-clear">Cancel</button><span class="progress" id="imp-progress">${esc(state.busy)}</span></div>
+        <p class="hint" style="margin-top:10px">Nothing goes live until you <b>Publish</b>. New products get an illustration until you add photos.</p>
+      </div>`;
+    }
+    return `
+      <div class="head"><div><a href="#products">← All products</a><h1 style="margin-top:6px">Import products from Excel or CSV</h1>
+        <p>Create many products at once from a spreadsheet, then add photos and details to each one.</p></div></div>
+      <div class="card"><h2>1. Choose your file</h2>
+        <p class="sub">One product per row. The first row holds the column titles: <b>Product Name</b>, <b>Price</b>, <b>Category</b>. Optional: <b>Description</b>, <b>Old Price</b>, <b>Size</b>, <b>Image URL</b>, or separate <b>Name (Arabic)</b> / <b>Name (English)</b> columns. Titles can be in Arabic too (اسم المنتج، السعر، القسم). Write names in Arabic or English — the other language is filled in automatically. Categories are matched by name; unknown ones are created.</p>
+        <div class="bar"><label class="btn primary">Choose an .xlsx or .csv file…<input type="file" accept=".xlsx,.csv,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" data-sheet hidden></label>
+          <button class="btn" data-act="imp-template">Download a template</button></div>
+        ${state.impError ? `<div class="note" style="margin-top:14px">${esc(state.impError)}</div>` : ""}
+      </div>
+      ${preview}`;
+  };
+
+  // apply the plan: create categories + products, translate, then show the result
+  async function runImport() {
+    const plan = importPlan(); const { opts } = state.imp;
+    const step = t => { state.busy = t; const el = $("#imp-progress"); if (el) el.textContent = t; };
+    // 1. new categories (named in the language they were written in)
+    const catIds = {};
+    plan.newCats.forEach(label => {
+      const lang = hasArabic(label) ? "ar" : "en";
+      const id = uniqueId(slugify(lang === "en" ? label : "") || "category", data.categories);
+      const base = findCategory(label) || data.categories[0];
+      data.categories.push({ id, art: Object.assign(clone((base && base.art) || { type: "jar", c1: "#EEF0FF", c2: "#2B35D8" }), { label: "" }), name: { ar: lang === "ar" ? label : "", en: lang === "en" ? label : "", ko: "" }, desc: { ar: "", en: "", ko: "" } });
+      catIds[norm(label)] = id;
+    });
+    // 2. products
+    const touched = []; let created = 0, updated = 0;
+    plan.forEach(x => {
+      if (x.action === "skip") return;
+      const cat = x.cat || catIds[norm(x.newCat)];
+      if (x.action === "update") {
+        const p = x.product; p.price = x.price; p.cat = cat;
+        if (x.oldPrice != null) p.oldPrice = x.oldPrice;
+        if (x.ar) p.name.ar = x.ar; if (x.en) p.name.en = x.en;
+        if (x.desc) p.desc[hasArabic(x.desc) ? "ar" : "en"] = x.desc;
+        if (x.size) p.size = x.size;
+        x.images.forEach(u => { if (!p.images.includes(u)) p.images.push(u); });
+        touched.push(p); updated++;
+      } else {
+        const catObj = data.categories.find(c => c.id === cat) || {};
+        const art = clone(catObj.art || { type: "bottle", c1: "#EEF0FF", c2: "#2B35D8", label: "" });
+        art.label = String(x.en || "").split(/\s+/)[0].toUpperCase().slice(0, 10);
+        const id = uniqueId(slugify(x.en) || "product", data.products);
+        const p = { id, cat, price: x.price, oldPrice: x.oldPrice, tags: ["new"], size: x.size, hidden: !opts.visible, images: x.images.slice(), art,
+          name: { ar: x.ar, en: x.en, ko: "" }, desc: { ar: "", en: "", ko: "" }, usage: { ar: "", en: "", ko: "" } };
+        if (x.desc) p.desc[hasArabic(x.desc) ? "ar" : "en"] = x.desc;
+        data.products.push(p); touched.push(p); created++;
+      }
+    });
+    save(true);
+    // 3. fill the missing language (Arabic ↔ English)
+    let trNote = "";
+    if (opts.translate) {
+      const jobs = []; // [object, key, from, to]
+      const want = (obj, key) => { if (obj[key].ar && !obj[key].en) jobs.push([obj, key, "ar", "en"]); else if (obj[key].en && !obj[key].ar) jobs.push([obj, key, "en", "ar"]); };
+      Object.values(catIds).forEach(id => want(data.categories.find(c => c.id === id), "name"));
+      touched.forEach(p => { want(p, "name"); want(p, "desc"); });
+      let done = 0;
+      try {
+        for (const [from, to] of [["ar", "en"], ["en", "ar"]]) {
+          const group = jobs.filter(j => j[2] === from);
+          for (let i = 0; i < group.length; i += 20) {
+            step(`Translating ${done + 1}–${Math.min(done + 20, jobs.length)} of ${jobs.length}…`);
+            const slice = group.slice(i, i + 20);
+            const out = await translate(slice.map(([o, k]) => o[k][from]), from, to);
+            slice.forEach(([o, k], n) => { if (out[n] && !o[k][to]) o[k][to] = out[n]; });
+            done += slice.length; save(true);
+          }
+        }
+      } catch (e) { trNote = ` Translation stopped after ${done} of ${jobs.length} text(s): ${esc(e.message)} You can fill the missing language in each product, or use the AR → EN / EN → AR buttons there.`; }
+      // brand-new products named only in Arabic get a readable link name once the English name is known
+      touched.forEach(p => {
+        if (/^product(-\d+)?$/.test(p.id) && slugify(p.name.en)) changeProductId(p, uniqueId(slugify(p.name.en), data.products, p));
+        if (!p.images.length && !p.art.label && p.name.en) p.art.label = p.name.en.split(/\s+/)[0].toUpperCase().slice(0, 10);
+      });
+      Object.values(catIds).forEach(id => {
+        const c = data.categories.find(c => c.id === id);
+        if (c && /^category(-\d+)?$/.test(c.id) && slugify(c.name.en)) { const nid = uniqueId(slugify(c.name.en), data.categories, c); data.products.forEach(p => { if (p.cat === c.id) p.cat = nid; }); c.id = nid; }
+      });
+      save(true);
+    }
+    step("");
+    state.imp = null;
+    state.impResult = `<b>Import finished:</b> ${created} new product(s)${opts.visible || !created ? "" : " (hidden until you untick “Hidden”)"}, ${updated} updated${plan.newCats.length ? `, ${plan.newCats.length} new categor${plan.newCats.length === 1 ? "y" : "ies"}` : ""}. Add photos to each product, then <b>Publish</b>.${trNote}`;
+    location.hash = "#products";
+    if (route().name === "products") render();
+  }
+  function downloadTemplate() {
+    const cats = data.categories.slice(0, 2);
+    const rows = [["Product Name", "Price", "Category", "Description", "Old Price", "Size"],
+      ["Snail Mucin Essence 100ml", "650", (cats[0] && cats[0].name.en) || "Skin Care", "Lightweight hydrating essence", "780", "100 ml"],
+      ["رامن كوري حار", "75", (cats[1] && cats[1].name.ar) || "المطبخ الكوري", "", "", ""]];
+    const csv = "﻿" + rows.map(r => r.map(c => /[",\n]/.test(c) ? `"${c.replace(/"/g, '""')}"` : c).join(",")).join("\r\n");
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+    a.download = "elf-shop-products-template.csv"; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  }
+
   /* ---------- Categories ---------- */
   views.categories = () => {
     live = () => data.categories.forEach((c, i) => { const el = $(`#cart-${i}`); if (el) el.innerHTML = window.elfArt(c.art, 2); });
@@ -264,20 +537,102 @@
   };
 
   /* ---------- Reviews ---------- */
-  views.reviews = () => `
-    <div class="head"><div><h1>Customer reviews</h1><p>Shown on the homepage. Copy real reviews from your Facebook page — only publish reviews customers actually wrote.</p></div>
-      <button class="btn primary" data-act="r-add">+ Add review</button></div>
-    ${data.reviews.some(r => /^customer name$/i.test((r.name || "").trim())) ? `<div class="note">Some reviews below are still <b>placeholders</b>. Replace or delete them before launch.</div>` : ""}
-    ${data.reviews.length ? "" : `<div class="card empty">No reviews yet — the reviews section is hidden on the homepage.</div>`}
+  const isPlaceholder = r => /^customer name$/i.test((r.name || "").trim());
+  function fbListHtml() {
+    const fb = state.fb; if (!fb) return "";
+    if (fb.error) return `<div class="note" style="margin-top:14px">${esc(fb.error)}${fb.setup ? " See “One-time setup” below." : ""}</div>`;
+    if (!fb.items.length) return `<div class="note" style="margin-top:14px">Facebook returned no reviews for this page yet.</div>`;
+    const have = new Set(data.reviews.map(r => r.fbId).filter(Boolean));
+    return `<div class="table-wrap" style="margin-top:14px"><table class="tbl"><thead><tr><th></th><th>Customer</th><th>Review</th><th>Date</th></tr></thead><tbody>
+      ${fb.items.map((r, i) => `<tr class="${have.has(r.id) ? "muted-row" : ""}">
+        <td><input type="checkbox" data-fb-sel="${i}" ${fb.sel.has(i) ? "checked" : ""} ${have.has(r.id) ? "disabled" : ""}></td>
+        <td><b>${esc(r.name || "Facebook user")}</b><br>${r.rating ? `<small>${"★".repeat(r.rating)}${"☆".repeat(5 - r.rating)}</small>` : r.recommend === false ? '<span class="chip red">Doesn\'t recommend</span>' : '<span class="chip">Recommends</span>'}</td>
+        <td dir="auto">${esc(r.text || "(no text)")}${have.has(r.id) ? ' <span class="chip grey">Already on the site</span>' : ""}</td>
+        <td class="num"><small>${esc((r.date || "").slice(0, 10))}</small></td></tr>`).join("")}
+      </tbody></table></div>
+      ${data.reviews.some(isPlaceholder) ? `<label class="check" style="margin-top:12px"><input type="checkbox" id="fb-drop-ph" checked>Remove the placeholder reviews (“Customer name”)</label>` : ""}
+      <div class="bar" style="margin-top:12px"><button class="btn primary" data-act="fb-import" id="fb-import-btn">Add ${fb.sel.size} selected review(s)</button><span class="hint">They're translated automatically and saved as a draft — Publish to show them.</span></div>`;
+  }
+  function refreshFbButton() { const b = $("#fb-import-btn"); if (b) { b.textContent = `Add ${state.fb.sel.size} selected review(s)`; b.disabled = !state.fb.sel.size; } }
+  async function fetchFacebookReviews() {
+    const st = $("#fb-status"); if (st) st.textContent = "Fetching…";
+    try {
+      let res;
+      try { res = await fetch("/admin/api/facebook-reviews", { credentials: "same-origin" }); }
+      catch (e) { throw Object.assign(new Error("Couldn't reach the site. Your admin sign-in may have expired — reload the page and sign in again."), {}); }
+      const j = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        if (!j.error && [404, 405, 501].includes(res.status)) throw new Error("Fetching from Facebook only works on the live site (elfshop.net/admin), not on this copy.");
+        throw Object.assign(new Error(j.error || `Facebook fetch failed (error ${res.status}).`), { setup: !!j.setup });
+      }
+      const have = new Set(data.reviews.map(r => r.fbId).filter(Boolean));
+      const items = j.reviews || [];
+      // pre-select positive reviews with text that aren't on the site yet
+      state.fb = { items, sel: new Set(items.map((r, i) => (r.text && r.recommend !== false && !(r.rating && r.rating < 4) && !have.has(r.id) ? i : -1)).filter(i => i >= 0)) };
+    } catch (e) { state.fb = { error: e.message, setup: e.setup, items: [], sel: new Set() }; }
+    render();
+  }
+  async function importFacebookReviews() {
+    const fb = state.fb; const picked = [...fb.sel].sort((a, b) => a - b).map(i => fb.items[i]).filter(Boolean);
+    if (!picked.length) return;
+    const dropPh = $("#fb-drop-ph") ? $("#fb-drop-ph").checked : false;
+    const added = picked.map(r => {
+      const lang = hasArabic(r.text) ? "ar" : "en";
+      return { name: r.name || "Facebook user", source: "facebook", fbId: r.id, url: r.url || data.settings.social.facebook || "", date: (r.date || "").slice(0, 10), rating: r.rating || null, product: "",
+        city: { ar: "", en: "", ko: "" }, text: { ar: lang === "ar" ? r.text : "", en: lang === "en" ? r.text : "", ko: "" } };
+    });
+    let note = "";
+    for (const [from, to] of [["ar", "en"], ["en", "ar"]]) {
+      const group = added.filter(r => r.text[from] && !r.text[to]);
+      if (!group.length) continue;
+      try { const out = await translate(group.map(r => r.text[from]), from, to); group.forEach((r, n) => { r.text[to] = out[n] || ""; }); }
+      catch (e) { note = " Some reviews couldn't be translated: " + e.message; }
+    }
+    if (dropPh) data.reviews = data.reviews.filter(r => !isPlaceholder(r));
+    data.reviews = added.concat(data.reviews);
+    state.fb = null; save(true); render();
+    toast(`${added.length} review(s) added as a draft. Publish to show them on the site.${note}`, !!note);
+  }
+  views.reviews = () => {
+    const vis = data.products.filter(p => !p.hidden);
+    return `
+    <div class="head"><div><h1>Customer reviews</h1><p>Shown on the homepage and on product pages. Only publish reviews customers actually wrote.</p></div>
+      <button class="btn primary" data-act="r-add">+ Add review by hand</button></div>
+    <div class="card"><h2>Import reviews from your Facebook page</h2>
+      <p class="sub">Fetches the recommendations people left on your Facebook page. You choose which ones appear on the site; they're translated into Arabic/English automatically and link back to Facebook.</p>
+      <div class="bar"><button class="btn primary" data-act="fb-fetch">Fetch reviews from Facebook</button><span class="hint" id="fb-status"></span></div>
+      ${fbListHtml()}
+      <details style="margin-top:14px"><summary><b>One-time setup: connect your Facebook page</b></summary>
+        <ol class="steps" style="margin-top:10px">
+          <li>Go to <a href="https://developers.facebook.com/apps" target="_blank" rel="noopener">developers.facebook.com/apps</a> → <b>Create app</b> (type “Other” → “Business”). You must be an admin of the Facebook page.</li>
+          <li>Open <a href="https://developers.facebook.com/tools/explorer/" target="_blank" rel="noopener">Graph API Explorer</a>, pick your app, then <b>Get Page Access Token</b> and allow <b>pages_show_list</b> and <b>pages_read_user_content</b> for your page.</li>
+          <li>Make the token long-lived with the <a href="https://developers.facebook.com/tools/debug/accesstoken/" target="_blank" rel="noopener">Access Token Debugger</a> (“Extend Access Token”), then request the page token again in the Explorer — a page token made from a long-lived user token doesn't expire.</li>
+          <li>Find your page ID: in the Explorer run <code>me/accounts</code> — copy the <code>id</code> of your page.</li>
+          <li>In Cloudflare → <b>Workers &amp; Pages → elf-shop → Settings → Variables and Secrets</b>, add two <b>Secrets</b> for Production: <code>FB_PAGE_ID</code> and <code>FB_PAGE_TOKEN</code>. Then redeploy (Deployments → ⋯ → Retry deployment).</li>
+        </ol>
+        <p class="hint">The token stays on Cloudflare's servers. It's never sent to visitors' browsers or written into the website.</p>
+      </details>
+    </div>
+    ${data.reviews.some(isPlaceholder) ? `<div class="note">Some reviews below are still <b>placeholders</b>. Replace or delete them before launch.</div>` : ""}
+    ${data.reviews.length ? "" : `<div class="card empty">No reviews yet — the reviews section is hidden on the site.</div>`}
     ${data.reviews.map((r, i) => `<div class="item">
-      <div class="item-head"><h3>Review ${i + 1}</h3><button class="btn sm danger" data-act="r-del" data-i="${i}">Delete</button></div>
-      <div class="grid2" style="margin-bottom:14px">${field("Customer name", `reviews.${i}.name`)}<span></span></div>
+      <div class="item-head"><h3>${r.source === "facebook" ? "Facebook review" : "Review"} ${i + 1}${r.name && !isPlaceholder(r) ? ` — ${esc(r.name)}` : ""}</h3><button class="btn sm danger" data-act="r-del" data-i="${i}">Delete</button></div>
+      <div class="grid3" style="margin-bottom:14px">
+        ${field("Customer name", `reviews.${i}.name`)}
+        <label class="f"><span>Where it was posted</span><select data-path="reviews.${i}.source" data-rerender><option value="facebook" ${r.source === "facebook" ? "selected" : ""}>Facebook</option><option value="" ${r.source !== "facebook" ? "selected" : ""}>Other (WhatsApp, in person…)</option></select></label>
+        ${field("Date", `reviews.${i}.date`, { type: "date" })}
+        ${r.source === "facebook" ? field("Link to the review on Facebook (optional)", `reviews.${i}.url`, { type: "url", ph: "https://www.facebook.com/…" }) : ""}
+        <label class="f"><span>Stars</span><select data-path="reviews.${i}.rating" data-kind="num"><option value="" ${!r.rating ? "selected" : ""}>${r.source === "facebook" ? "None — show “Recommends”" : "None — show 5 stars"}</option>${[5, 4, 3, 2, 1].map(n => `<option value="${n}" ${Number(r.rating) === n ? "selected" : ""}>${"★".repeat(n)} (${n})</option>`).join("")}</select></label>
+        <label class="f"><span>About a product (optional)</span><select data-path="reviews.${i}.product"><option value="">The whole store</option>${vis.map(p => `<option value="${esc(p.id)}" ${r.product === p.id ? "selected" : ""}>${esc(p.name.en || p.name.ar || p.id)}</option>`).join("")}</select><small>Shown first on that product's page.</small></label>
+      </div>
       ${tri("City", `reviews.${i}.city`)}
       ${tri("Review text", `reviews.${i}.text`, 3)}
     </div>`).join("")}`;
+  };
 
   /* ---------- Settings ---------- */
   views.settings = () => {
+    live = () => { const s = $("#ship-sum"); if (s) s.textContent = shippingSummary(); const g = $("#gov-count"); if (g) g.textContent = govCountText(); };
     const vis = data.products.filter(p => !p.hidden);
     const heroSel = n => `<label class="f"><span>Featured product ${n + 1}</span><select data-path="settings.heroProducts.${n}"><option value="">(automatic)</option>${vis.map(p => `<option value="${esc(p.id)}" ${data.settings.heroProducts[n] === p.id ? "selected" : ""}>${esc(p.name.en || p.id)}</option>`).join("")}</select></label>`;
     return `
@@ -292,11 +647,16 @@
         ${field("Store email", "settings.email", { type: "email" })}
       </div>
     </div>
-    <div class="card"><h2>Shipping</h2><p class="sub">Leave the fee empty to show “confirmed on WhatsApp” at checkout.</p>
-      <div class="grid2">
-        ${field("Fixed shipping fee (EGP)", "settings.shipping.flat", { type: "number", kind: "num", attrs: 'min="0"' })}
-        ${field("Free shipping for orders over (EGP)", "settings.shipping.freeOver", { type: "number", kind: "num", attrs: 'min="0"' })}
+    <div class="card"><h2>Shipping (Egypt)</h2><p class="sub">The fee depends on the governorate the customer picks at checkout. Customers see a bar in their cart showing how much more to add for free shipping.</p>
+      <div class="grid2" style="margin-bottom:14px">
+        ${field("Standard fee — all governorates (EGP)", "settings.shipping.defaultFee", { type: "number", kind: "num", attrs: 'min="0"', hint: "Used for every governorate without a special fee below. Leave empty to show “confirmed on WhatsApp” instead." })}
+        ${field("Free shipping when the subtotal is above (EGP)", "settings.shipping.freeAbove", { type: "number", kind: "num", attrs: 'min="0"', hint: "Orders above this amount ship free to any governorate. Leave empty for no free shipping." })}
       </div>
+      <details class="gov-fees" ${Object.values(data.settings.shipping.rates).some(v => v != null) ? "open" : ""}>
+        <summary><b>Special fee per governorate</b> <span class="hint" id="gov-count">${govCountText()}</span></summary>
+        <div class="grid3" style="margin-top:12px">${(window.ELF_GOVERNORATES || []).map(([ar, en]) => field(`${esc(en)} · <span dir="rtl">${esc(ar)}</span>`, `settings.shipping.rates.${en}`, { type: "number", kind: "num", attrs: 'min="0"', ph: data.settings.shipping.defaultFee == null ? "standard" : `${data.settings.shipping.defaultFee} (standard)` })).join("")}</div>
+      </details>
+      <p class="hint" id="ship-sum" style="margin-top:12px">${esc(shippingSummary())}</p>
     </div>
     <div class="card"><h2>Social media</h2>
       <div class="grid3">${field("Facebook page link", "settings.social.facebook", { type: "url" })}${field("Instagram link", "settings.social.instagram", { type: "url" })}${field("TikTok link", "settings.social.tiktok", { type: "url" })}</div>
@@ -443,6 +803,7 @@
   document.addEventListener("input", e => {
     const el = e.target;
     if (el.dataset.path) {
+      if (autoTranslated.delete(el.dataset.path)) { el.classList.remove("tr-auto"); el.removeAttribute("title"); }
       let v = el.type === "checkbox" ? el.checked : el.value;
       if (el.dataset.kind === "num") v = el.value === "" ? null : Number(el.value);
       setPath(data, el.dataset.path, v);
@@ -470,12 +831,26 @@
     else if (el.dataset.rename) rename(el);
     else if (el.dataset.upload !== undefined) { await addPhotos(Number(el.dataset.upload), el.files); }
     else if (el.dataset.import !== undefined) importFile(el.files[0]);
-    else if (el.dataset.path && /\.name\.en$/.test(el.dataset.path) && /^products\.\d+\./.test(el.dataset.path)) {
-      // give brand-new products a readable link name based on their English name
-      const i = Number(el.dataset.path.split(".")[1]); const p = data.products[i];
-      if (/^new-product/.test(p.id) && slugify(el.value)) { changeProductId(p, uniqueId(slugify(el.value), data.products, p)); save(true); history.replaceState(null, "", "#product/" + encodeURIComponent(p.id)); render(); }
+    else if (el.dataset.sheet !== undefined) { await loadSheet(el.files[0]); el.value = ""; }
+    else if (el.dataset.impOpt && state.imp) { state.imp.opts[el.dataset.impOpt] = el.checked; render(); }
+    else if (el.dataset.fbSel !== undefined && state.fb) { const i = Number(el.dataset.fbSel); if (el.checked) state.fb.sel.add(i); else state.fb.sel.delete(i); refreshFbButton(); }
+    else if (el.dataset.path) {
+      const m = /^(.*)\.(ar|en)$/.exec(el.dataset.path);
+      if (m && TR_PATHS.test(m[1]) && el.value.trim()) {
+        // typed Arabic → fill empty English (and the other way round)
+        const other = m[2] === "ar" ? "en" : "ar";
+        if (!String(getPath(data, `${m[1]}.${other}`) || "").trim()) translateField(m[1], m[2], other, true);
+      }
+      nameProductFromEnglish(m ? m[1] : "");
     }
   });
+  // give brand-new products a readable link name (ID) based on their English name
+  function nameProductFromEnglish(path) {
+    const m = /^products\.(\d+)\.name$/.exec(path || ""); if (!m) return;
+    const p = data.products[Number(m[1])]; if (!p || !/^new-product/.test(p.id) || !slugify(p.name.en)) return;
+    changeProductId(p, uniqueId(slugify(p.name.en), data.products, p)); save(true);
+    if (route().name === "product") { history.replaceState(null, "", "#product/" + encodeURIComponent(p.id)); render(); }
+  }
 
   const uniqueId = (wanted, list, self) => { let id = wanted, n = 2; while (list.some(x => x !== self && x.id === id)) id = `${wanted}-${n++}`; return id; };
   function changeProductId(p, id) {
@@ -522,7 +897,23 @@
     },
     "c-del"(el) { if (confirm("Delete this category?")) { data.categories.splice(el.dataset.i, 1); save(true); render(); } },
     "c-move"(el) { move(data.categories, el); },
-    "r-add"() { data.reviews.push({ name: "", city: { ar: "", en: "", ko: "" }, text: { ar: "", en: "", ko: "" } }); save(true); render(); window.scrollTo(0, document.body.scrollHeight); },
+    "r-add"() { data.reviews.push({ name: "", source: "facebook", url: "", date: "", rating: null, product: "", city: { ar: "", en: "", ko: "" }, text: { ar: "", en: "", ko: "" } }); save(true); render(); window.scrollTo(0, document.body.scrollHeight); },
+    tr(el) {
+      const { path, from, to } = el.dataset;
+      const cur = String(getPath(data, `${path}.${to}`) || "").trim();
+      if (cur && !autoTranslated.has(`${path}.${to}`) && !confirm(`Replace the ${LNAME[to]} text with a new translation of the ${LNAME[from]} text?`)) return;
+      translateField(path, from, to, false);
+    },
+    "imp-template"() { downloadTemplate(); },
+    "imp-clear"() { state.imp = null; state.impError = ""; render(); },
+    "imp-dismiss"() { state.impResult = ""; render(); },
+    async "imp-run"(el) {
+      el.disabled = true;
+      try { await runImport(); toast("Products imported as a draft. Add photos, then Publish."); }
+      catch (e) { state.busy = ""; toast("Import failed: " + e.message, true); render(); }
+    },
+    async "fb-fetch"(el) { el.disabled = true; await fetchFacebookReviews(); },
+    async "fb-import"(el) { el.disabled = true; await importFacebookReviews(); },
     "r-del"(el) { if (confirm("Delete this review?")) { data.reviews.splice(el.dataset.i, 1); save(true); render(); } },
     "theme-reset"() { data.theme = {}; save(true); render(); },
     discard() {
