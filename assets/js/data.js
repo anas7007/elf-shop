@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-20T17:27:10.101Z",
+  "updatedAt": "2026-11-24T11:56:07.815Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -161,6 +161,39 @@ window.ELF_DATA = {
     }
   ],
   "products": [
+    {
+      "id": "new-product",
+      "cat": "skincare",
+      "price": 0,
+      "oldPrice": null,
+      "tags": [
+        "new"
+      ],
+      "size": "",
+      "hidden": true,
+      "images": [],
+      "art": {
+        "type": "bottle",
+        "c1": "#EEF0FF",
+        "c2": "#2B35D8",
+        "label": ""
+      },
+      "name": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      },
+      "desc": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      },
+      "usage": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      }
+    },
     {
       "id": "snail-mucin-essence",
       "cat": "skincare",
@@ -773,8 +806,17 @@ window.ELF_DATA = {
     }
   ],
   "texts": {
-    "ar": {},
-    "en": {},
-    "ko": {}
+    "ar": {
+      "hero.stat1": "١٣ سنة خبرة ",
+      "hero.stat3": "كوريا .. مصر"
+    },
+    "en": {
+      "hero.stat1": "13 years of trust ",
+      "hero.stat3": "Korea .. egypt"
+    },
+    "ko": {
+      "hero.stat1": "13 년의 신뢰",
+      "hero.stat3": "한국 .. 이집트"
+    }
   }
 };
