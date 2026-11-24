@@ -24,13 +24,28 @@ const LANGS = { ar: "Arabic", en: "English", ko: "Korean" };
 const MAX_TEXTS = 50, MAX_CHARS = 4000, BATCH_CHARS = 1800;
 let workingModel = null; // remembered between requests while this worker instance lives
 
+// common shop words, so they're translated the way Egyptian K-beauty shops write them
+const GLOSSARY = "essence = إيسنس, serum = سيروم, toner = تونر, ampoule = أمبول, cleanser / cleansing foam = غسول / غسول رغوي, sheet mask = ماسك ورقي, " +
+  "sunscreen = واقي شمس, moisturizer / cream = كريم مرطب / كريم, snail mucin = إفراز الحلزون, ramen = رامن, lightstick = لايت ستيك, photocard = فوتوكارد, album = ألبوم";
 const systemPrompt = (from, to) =>
   `You are a professional translator for "The Elf Shop", an online store in Egypt selling authentic Korean skincare, sheet masks, Korean snacks and food, K-pop merchandise and Korean culture gifts. ` +
-  `Translate each text from ${LANGS[from]} to ${LANGS[to]}. Rules: keep brand names, product model names, numbers, percentages, sizes and units (ml, g, pcs) and emoji exactly as they are; ` +
+  `Translate each text from ${LANGS[from]} to ${LANGS[to]}. Rules: keep brand names, numbers, percentages, sizes and units (ml, g, pcs) and emoji exactly as they are; ` +
+  `in product names translate the descriptive words (essence, cream, ramen, mask…) and keep only the brand or model name as written; ` +
   `translate the meaning naturally as a shop would write it — short and clear for product names, fluent for descriptions; ` +
-  (to === "ar" ? "write Modern Standard Arabic that Egyptian customers read easily; " : "") +
+  (to === "ar" || from === "ar" ? `use these Arabic shop terms: ${GLOSSARY}; ` : "") +
+  (to === "ar" ? "write Modern Standard Arabic that Egyptian customers read easily, using only Arabic letters apart from the kept names; " : "") +
   `keep line breaks. Do not add explanations, quotes or notes. ` +
   `Input is a JSON array of strings. Reply with ONLY a JSON array of the translated strings, same length and same order.`;
+
+// letters from another alphabet that is neither the source nor the target language → the model drifted
+const SCRIPTS = { thai: /[฀-๿]/, cyrillic: /[Ѐ-ӿ]/, devanagari: /[ऀ-ॿ]/, hebrew: /[֐-׿]/, cjk: /[぀-ヿ一-鿿]/, hangul: /[가-힯ᄀ-ᇿ]/, arabic: /[؀-ۿ]/ };
+function drifted(src, out, to) {
+  for (const [name, re] of Object.entries(SCRIPTS)) {
+    if ((name === "hangul" && to === "ko") || (name === "arabic" && to === "ar")) continue;
+    if (re.test(out) && !re.test(src)) return true;
+  }
+  return to === "ar" && !SCRIPTS.arabic.test(out) && /[a-z]{3,}\s+[a-z]{3,}\s+[a-z]{3,}/i.test(src) && out.length > 40; // a whole English sentence left untranslated
+}
 
 function parseArray(out, n) {
   let v = out && (out.response !== undefined ? out.response : out.result !== undefined ? out.result : out);
@@ -86,6 +101,15 @@ async function translateBatch(env, texts, from, to) {
       if (!res && texts.length > 1) { // reply wasn't a clean array — retry one by one
         res = [];
         for (const t of texts) { const one = await chatTranslate(env, model, [t], from, to); if (!one) { res = null; break; } res.push(one[0]); }
+      }
+      if (res) {
+        // retry (once, one by one) any item that came back empty or in the wrong alphabet
+        for (let i = 0; i < texts.length; i++) {
+          if (texts[i].trim() && (!res[i] || drifted(texts[i], res[i], to))) {
+            const one = await chatTranslate(env, model, [texts[i]], from, to).catch(() => null);
+            res[i] = one && one[0] && !drifted(texts[i], one[0], to) ? one[0] : "";
+          }
+        }
       }
       if (res && res.every((s, i) => s || !texts[i].trim())) { workingModel = model; return { translations: res, model }; }
     } catch (e) {
