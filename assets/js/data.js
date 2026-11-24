@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-24T11:56:07.815Z",
+  "updatedAt": "2026-11-24T12:29:36.066Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -28,8 +28,13 @@ window.ELF_DATA = {
       "ko": "EGP"
     },
     "shipping": {
-      "flat": null,
-      "freeOver": null
+      "v": 2,
+      "defaultFee": 90,
+      "rates": {
+        "Cairo": 75,
+        "Alexandria": 75
+      },
+      "freeAbove": 2000
     },
     "metaPixelId": "",
     "formEndpoint": "https://formsubmit.co/ajax/tes.korea2013@gmail.com",
@@ -753,55 +758,70 @@ window.ELF_DATA = {
   ],
   "reviews": [
     {
-      "name": "Customer name",
+      "name": "Esraa",
       "city": {
         "ar": "الإسكندرية",
         "en": "Alexandria",
         "ko": "알렉산드리아"
       },
       "text": {
-        "ar": "ضع هنا تقييم حقيقي من صفحة الفيسبوك. مثال: المنتجات أصلية والتغليف شيك جداً والتوصيل كان سريع.",
-        "en": "Put a real review from your Facebook page here. e.g. Authentic products, lovely packaging and fast delivery.",
+        "ar": "المنتجات أصلية والتوصيل كان سريع ",
+        "en": "Good products and fast delivery ",
         "ko": "페이스북 페이지의 실제 후기를 여기에 넣으세요."
       }
     },
     {
-      "name": "Customer name",
+      "name": "Aya ahmed",
       "city": {
         "ar": "القاهرة",
         "en": "Cairo",
         "ko": "카이로"
       },
       "text": {
-        "ar": "ضع هنا تقييم حقيقي من صفحة الفيسبوك. مثال: أحسن مكان أجيب منه الماسكات الكورية.",
-        "en": "Put a real review from your Facebook page here. e.g. The best place to get Korean sheet masks.",
+        "ar": "أحسن مكان أجيب منه الماسكات الكورية",
+        "en": "The best place to get Korean sheet masks.",
         "ko": "페이스북 페이지의 실제 후기를 여기에 넣으세요."
-      }
+      },
+      "rating": 5
     },
     {
-      "name": "Customer name",
+      "name": "Sofia",
       "city": {
         "ar": "المنصورة",
         "en": "Mansoura",
         "ko": "만수라"
       },
       "text": {
-        "ar": "ضع هنا تقييم حقيقي من صفحة الفيسبوك. مثال: خدمة العملاء على واتساب ساعدتني أختار روتين لبشرتي.",
-        "en": "Put a real review from your Facebook page here. e.g. WhatsApp support helped me choose a routine for my skin.",
+        "ar": "كلمتهم عالواتساب ورشحولي افضل روتين لبشرتي",
+        "en": "WhatsApp support helped me choose a routine for my skin.",
         "ko": "페이스북 페이지의 실제 후기를 여기에 넣으세요."
-      }
+      },
+      "rating": 5
     },
     {
-      "name": "Customer name",
+      "name": "Menna",
       "city": {
         "ar": "الجيزة",
         "en": "Giza",
         "ko": "기자"
       },
       "text": {
-        "ar": "ضع هنا تقييم حقيقي من صفحة الفيسبوك. مثال: الألبوم وصل أصلي ومعاه الفوتوكارد.",
+        "ar": "من زمان وانا بتعامل مع اونر ندي وبجد هي اكثر حد ثقه بجيب منه اي حاجه تبع الكوري 💓",
         "en": "Put a real review from your Facebook page here. e.g. My album arrived authentic with the photocard.",
         "ko": "페이스북 페이지의 실제 후기를 여기에 넣으세요."
+      }
+    },
+    {
+      "name": "",
+      "city": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      },
+      "text": {
+        "ar": "",
+        "en": "",
+        "ko": ""
       }
     }
   ],
