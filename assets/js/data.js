@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T22:10:57.280Z",
+  "updatedAt": "2026-11-27T22:12:06.187Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -2701,7 +2701,7 @@ window.ELF_DATA = {
     },
     {
       "id": "ricocell-snail",
-      "cat": "skincare",
+      "cat": "sheetmask",
       "price": 50,
       "oldPrice": null,
       "tags": [
@@ -2709,7 +2709,10 @@ window.ELF_DATA = {
       ],
       "size": "33",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/ricocell-snail-mwzjdzfv0.jpg",
+        "assets/products/ricocell-snail-mwzjdzfv1.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
