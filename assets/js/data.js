@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T22:06:31.525Z",
+  "updatedAt": "2026-11-27T22:07:51.761Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -2481,7 +2481,7 @@ window.ELF_DATA = {
     },
     {
       "id": "tony-moly-tomato",
-      "cat": "skincare",
+      "cat": "sheetmask",
       "price": 60,
       "oldPrice": null,
       "tags": [
