@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T20:54:42.837Z",
+  "updatedAt": "2026-11-27T20:58:10.204Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -1157,7 +1157,12 @@ window.ELF_DATA = {
       ],
       "size": "30",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/softune-nudy-water-tint-02-peony-brew-mwzgqwm30.jpg",
+        "assets/products/softune-nudy-water-tint-02-peony-brew-mwzgqwm31.jpg",
+        "assets/products/softune-nudy-water-tint-02-peony-brew-mwzgqwm32.jpg",
+        "assets/products/softune-nudy-water-tint-02-peony-brew-mwzgqwm33.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
