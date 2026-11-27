@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T21:29:52.103Z",
+  "updatedAt": "2026-11-27T21:43:51.284Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -2204,6 +2204,666 @@ window.ELF_DATA = {
       "name": {
         "ar": "عصا واقي شمس مهدئ ديرما",
         "en": "Derma calming sunstick",
+        "ko": ""
+      },
+      "desc": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      },
+      "usage": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      }
+    },
+    {
+      "id": "tony-moly-pomegranate",
+      "cat": "sheetmask",
+      "price": 60,
+      "oldPrice": null,
+      "tags": [
+        "new"
+      ],
+      "size": "33",
+      "hidden": false,
+      "images": [],
+      "art": {
+        "type": "bottle",
+        "c1": "#E8ECFF",
+        "c2": "#2B35D8",
+        "label": "TONY"
+      },
+      "name": {
+        "ar": "tony moly رمان",
+        "en": "tony moly pomegranate",
+        "ko": ""
+      },
+      "desc": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      },
+      "usage": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      }
+    },
+    {
+      "id": "tony-moly-pumpkin",
+      "cat": "skincare",
+      "price": 60,
+      "oldPrice": null,
+      "tags": [
+        "new"
+      ],
+      "size": "33",
+      "hidden": false,
+      "images": [],
+      "art": {
+        "type": "bottle",
+        "c1": "#E8ECFF",
+        "c2": "#2B35D8",
+        "label": "TONY"
+      },
+      "name": {
+        "ar": "tony moly يقطين",
+        "en": "tony moly pumpkin",
+        "ko": ""
+      },
+      "desc": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      },
+      "usage": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      }
+    },
+    {
+      "id": "tony-moly-strawbery",
+      "cat": "skincare",
+      "price": 60,
+      "oldPrice": null,
+      "tags": [
+        "new"
+      ],
+      "size": "33",
+      "hidden": false,
+      "images": [],
+      "art": {
+        "type": "bottle",
+        "c1": "#E8ECFF",
+        "c2": "#2B35D8",
+        "label": "TONY"
+      },
+      "name": {
+        "ar": "tony moly فراولة",
+        "en": "tony moly strawbery",
+        "ko": ""
+      },
+      "desc": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      },
+      "usage": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      }
+    },
+    {
+      "id": "tony-moly-coconut",
+      "cat": "skincare",
+      "price": 60,
+      "oldPrice": null,
+      "tags": [
+        "new"
+      ],
+      "size": "33",
+      "hidden": false,
+      "images": [],
+      "art": {
+        "type": "bottle",
+        "c1": "#E8ECFF",
+        "c2": "#2B35D8",
+        "label": "TONY"
+      },
+      "name": {
+        "ar": "tony moly جوز هند",
+        "en": "tony moly coconut",
+        "ko": ""
+      },
+      "desc": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      },
+      "usage": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      }
+    },
+    {
+      "id": "tony-moly-shine-muscat",
+      "cat": "skincare",
+      "price": 60,
+      "oldPrice": null,
+      "tags": [
+        "new"
+      ],
+      "size": "33",
+      "hidden": false,
+      "images": [],
+      "art": {
+        "type": "bottle",
+        "c1": "#E8ECFF",
+        "c2": "#2B35D8",
+        "label": "TONY"
+      },
+      "name": {
+        "ar": "tony moly شاين مسكات",
+        "en": "tony moly shine muscat",
+        "ko": ""
+      },
+      "desc": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      },
+      "usage": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      }
+    },
+    {
+      "id": "tony-moly-aloe",
+      "cat": "skincare",
+      "price": 60,
+      "oldPrice": null,
+      "tags": [
+        "new"
+      ],
+      "size": "33",
+      "hidden": false,
+      "images": [],
+      "art": {
+        "type": "bottle",
+        "c1": "#E8ECFF",
+        "c2": "#2B35D8",
+        "label": "TONY"
+      },
+      "name": {
+        "ar": "tony moly ألوة",
+        "en": "tony moly aloe",
+        "ko": ""
+      },
+      "desc": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      },
+      "usage": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      }
+    },
+    {
+      "id": "tony-moly-pienapple",
+      "cat": "skincare",
+      "price": 60,
+      "oldPrice": null,
+      "tags": [
+        "new"
+      ],
+      "size": "33",
+      "hidden": false,
+      "images": [],
+      "art": {
+        "type": "bottle",
+        "c1": "#E8ECFF",
+        "c2": "#2B35D8",
+        "label": "TONY"
+      },
+      "name": {
+        "ar": "tony moly أناناس",
+        "en": "tony moly pienapple",
+        "ko": ""
+      },
+      "desc": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      },
+      "usage": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      }
+    },
+    {
+      "id": "tony-moly-tomato",
+      "cat": "skincare",
+      "price": 60,
+      "oldPrice": null,
+      "tags": [
+        "new"
+      ],
+      "size": "33",
+      "hidden": false,
+      "images": [],
+      "art": {
+        "type": "bottle",
+        "c1": "#E8ECFF",
+        "c2": "#2B35D8",
+        "label": "TONY"
+      },
+      "name": {
+        "ar": "tony moly طماطم",
+        "en": "tony moly tomato",
+        "ko": ""
+      },
+      "desc": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      },
+      "usage": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      }
+    },
+    {
+      "id": "biodance-hydro-cera-nol-real-deep-mask",
+      "cat": "skincare",
+      "price": 350,
+      "oldPrice": null,
+      "tags": [
+        "new"
+      ],
+      "size": "45",
+      "hidden": false,
+      "images": [],
+      "art": {
+        "type": "bottle",
+        "c1": "#E8ECFF",
+        "c2": "#2B35D8",
+        "label": "BIODANCE"
+      },
+      "name": {
+        "ar": "biodance hydro cera nol ماسك ورقي عميق حقيقي",
+        "en": "biodance hydro cera nol real deep mask",
+        "ko": ""
+      },
+      "desc": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      },
+      "usage": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      }
+    },
+    {
+      "id": "ricocell-aloe",
+      "cat": "skincare",
+      "price": 50,
+      "oldPrice": null,
+      "tags": [
+        "new"
+      ],
+      "size": "33",
+      "hidden": false,
+      "images": [],
+      "art": {
+        "type": "bottle",
+        "c1": "#E8ECFF",
+        "c2": "#2B35D8",
+        "label": "RICOCELL"
+      },
+      "name": {
+        "ar": "ricocell ألوة",
+        "en": "ricocell aloe",
+        "ko": ""
+      },
+      "desc": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      },
+      "usage": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      }
+    },
+    {
+      "id": "ricocell-potato",
+      "cat": "skincare",
+      "price": 50,
+      "oldPrice": null,
+      "tags": [
+        "new"
+      ],
+      "size": "33",
+      "hidden": false,
+      "images": [],
+      "art": {
+        "type": "bottle",
+        "c1": "#E8ECFF",
+        "c2": "#2B35D8",
+        "label": "RICOCELL"
+      },
+      "name": {
+        "ar": "ricocell بطاطس",
+        "en": "ricocell potato",
+        "ko": ""
+      },
+      "desc": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      },
+      "usage": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      }
+    },
+    {
+      "id": "ricocell-royal-jelly",
+      "cat": "skincare",
+      "price": 50,
+      "oldPrice": null,
+      "tags": [
+        "new"
+      ],
+      "size": "33",
+      "hidden": false,
+      "images": [],
+      "art": {
+        "type": "bottle",
+        "c1": "#E8ECFF",
+        "c2": "#2B35D8",
+        "label": "RICOCELL"
+      },
+      "name": {
+        "ar": "ricocell عسل رويال",
+        "en": "ricocell royal jelly",
+        "ko": ""
+      },
+      "desc": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      },
+      "usage": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      }
+    },
+    {
+      "id": "ricocell-collagen",
+      "cat": "skincare",
+      "price": 50,
+      "oldPrice": null,
+      "tags": [
+        "new"
+      ],
+      "size": "33",
+      "hidden": false,
+      "images": [],
+      "art": {
+        "type": "bottle",
+        "c1": "#E8ECFF",
+        "c2": "#2B35D8",
+        "label": "RICOCELL"
+      },
+      "name": {
+        "ar": "ريكوسيل كولاجين",
+        "en": "ricocell collagen",
+        "ko": ""
+      },
+      "desc": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      },
+      "usage": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      }
+    },
+    {
+      "id": "ricocell-snail",
+      "cat": "skincare",
+      "price": 50,
+      "oldPrice": null,
+      "tags": [
+        "new"
+      ],
+      "size": "33",
+      "hidden": false,
+      "images": [],
+      "art": {
+        "type": "bottle",
+        "c1": "#E8ECFF",
+        "c2": "#2B35D8",
+        "label": "RICOCELL"
+      },
+      "name": {
+        "ar": "ريكوسيل إفراز الحلزون",
+        "en": "ricocell snail",
+        "ko": ""
+      },
+      "desc": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      },
+      "usage": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      }
+    },
+    {
+      "id": "ricocell-pomegranate",
+      "cat": "skincare",
+      "price": 50,
+      "oldPrice": null,
+      "tags": [
+        "new"
+      ],
+      "size": "33",
+      "hidden": false,
+      "images": [],
+      "art": {
+        "type": "bottle",
+        "c1": "#E8ECFF",
+        "c2": "#2B35D8",
+        "label": "RICOCELL"
+      },
+      "name": {
+        "ar": "ريكوسيل رمان",
+        "en": "ricocell pomegranate",
+        "ko": ""
+      },
+      "desc": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      },
+      "usage": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      }
+    },
+    {
+      "id": "ricocell-rice",
+      "cat": "skincare",
+      "price": 50,
+      "oldPrice": null,
+      "tags": [
+        "new"
+      ],
+      "size": "33",
+      "hidden": false,
+      "images": [],
+      "art": {
+        "type": "bottle",
+        "c1": "#E8ECFF",
+        "c2": "#2B35D8",
+        "label": "RICOCELL"
+      },
+      "name": {
+        "ar": "ريكوسيل أرز",
+        "en": "ricocell rice",
+        "ko": ""
+      },
+      "desc": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      },
+      "usage": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      }
+    },
+    {
+      "id": "ricocell-vitamin",
+      "cat": "skincare",
+      "price": 50,
+      "oldPrice": null,
+      "tags": [
+        "new"
+      ],
+      "size": "33",
+      "hidden": false,
+      "images": [],
+      "art": {
+        "type": "bottle",
+        "c1": "#E8ECFF",
+        "c2": "#2B35D8",
+        "label": "RICOCELL"
+      },
+      "name": {
+        "ar": "ريكوسيل فيتامين",
+        "en": "ricocell vitamin",
+        "ko": ""
+      },
+      "desc": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      },
+      "usage": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      }
+    },
+    {
+      "id": "ricocell-green-tea",
+      "cat": "skincare",
+      "price": 50,
+      "oldPrice": null,
+      "tags": [
+        "new"
+      ],
+      "size": "33",
+      "hidden": false,
+      "images": [],
+      "art": {
+        "type": "bottle",
+        "c1": "#E8ECFF",
+        "c2": "#2B35D8",
+        "label": "RICOCELL"
+      },
+      "name": {
+        "ar": "ريكوسيل شاي أخضر",
+        "en": "ricocell green tea",
+        "ko": ""
+      },
+      "desc": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      },
+      "usage": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      }
+    },
+    {
+      "id": "ricocell-sea-weed",
+      "cat": "skincare",
+      "price": 50,
+      "oldPrice": null,
+      "tags": [
+        "new"
+      ],
+      "size": "33",
+      "hidden": false,
+      "images": [],
+      "art": {
+        "type": "bottle",
+        "c1": "#E8ECFF",
+        "c2": "#2B35D8",
+        "label": "RICOCELL"
+      },
+      "name": {
+        "ar": "ريكوسيل طحالب بحرية",
+        "en": "ricocell sea weed",
+        "ko": ""
+      },
+      "desc": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      },
+      "usage": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      }
+    },
+    {
+      "id": "mwdiheal-birch-dermaplus-mask",
+      "cat": "skincare",
+      "price": 50,
+      "oldPrice": null,
+      "tags": [
+        "new"
+      ],
+      "size": "33",
+      "hidden": false,
+      "images": [],
+      "art": {
+        "type": "bottle",
+        "c1": "#E8ECFF",
+        "c2": "#2B35D8",
+        "label": "MWDIHEAL"
+      },
+      "name": {
+        "ar": "مديهيل ماسك ورقي بيرش ديرما بلاس",
+        "en": "mwdiheal birch dermaplus mask",
         "ko": ""
       },
       "desc": {
