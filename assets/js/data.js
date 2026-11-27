@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T20:32:50.417Z",
+  "updatedAt": "2026-11-27T20:35:55.751Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -897,7 +897,10 @@ window.ELF_DATA = {
       ],
       "size": "40",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/personal-cushion-blusher-drar-coral-eipkn-mwzfyaxy0.jpg",
+        "assets/products/personal-cushion-blusher-drar-coral-eipkn-mwzfyaxy1.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
