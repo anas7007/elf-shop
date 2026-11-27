@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T20:14:44.436Z",
+  "updatedAt": "2026-11-27T20:17:32.434Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -705,7 +705,13 @@ window.ELF_DATA = {
       ],
       "size": "55",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/apple-hand-cream-the-face-shop-mwzfanm90.jpg",
+        "assets/products/apple-hand-cream-the-face-shop-mwzfanm91.jpg",
+        "assets/products/apple-hand-cream-the-face-shop-mwzfanm92.jpg",
+        "assets/products/apple-hand-cream-the-face-shop-mwzfanm93.jpg",
+        "assets/products/apple-hand-cream-the-face-shop-mwzfanm94.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
