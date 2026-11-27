@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T20:58:10.204Z",
+  "updatedAt": "2026-11-27T20:59:33.057Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -1195,7 +1195,11 @@ window.ELF_DATA = {
       ],
       "size": "30",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/softune-nudy-water-tint-01-dewed-peach-mwzgsojk0.jpg",
+        "assets/products/softune-nudy-water-tint-01-dewed-peach-mwzgsojk1.jpg",
+        "assets/products/softune-nudy-water-tint-01-dewed-peach-mwzgsojk2.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
