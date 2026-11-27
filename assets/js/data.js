@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T21:24:30.981Z",
+  "updatedAt": "2026-11-27T21:25:32.350Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -1493,7 +1493,11 @@ window.ELF_DATA = {
       ],
       "size": "10",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/clean-it-zero-original-cleansing-balm-banila-co-mwzhq3pa0.jpg",
+        "assets/products/clean-it-zero-original-cleansing-balm-banila-co-mwzhq3pa1.jpg",
+        "assets/products/clean-it-zero-original-cleansing-balm-banila-co-mwzhq3pa2.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
