@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T22:07:51.761Z",
+  "updatedAt": "2026-11-27T22:09:11.942Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -2519,7 +2519,7 @@ window.ELF_DATA = {
     },
     {
       "id": "biodance-hydro-cera-nol-real-deep-mask",
-      "cat": "skincare",
+      "cat": "sheetmask",
       "price": 350,
       "oldPrice": null,
       "tags": [
