@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T21:12:21.097Z",
+  "updatedAt": "2026-11-27T21:15:13.848Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -1382,7 +1382,13 @@ window.ELF_DATA = {
       ],
       "size": "10",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/step-3-magic-nose-pack-mwzhcugm0.jpg",
+        "assets/products/step-3-magic-nose-pack-mwzhcugm1.jpg",
+        "assets/products/step-3-magic-nose-pack-mwzhcugm2.jpg",
+        "assets/products/step-3-magic-nose-pack-mwzhcugm3.jpg",
+        "assets/products/step-3-magic-nose-pack-mwzhcugm4.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
@@ -1390,7 +1396,7 @@ window.ELF_DATA = {
         "label": "STEP"
       },
       "name": {
-        "ar": "حزمة أنف سحرية خطوة 3",
+        "ar": "حزمة أنف سحرية خطوة 3 شيت واحد ",
         "en": "step 3 magic nose pack",
         "ko": ""
       },
