@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T19:45:50.951Z",
+  "updatedAt": "2026-11-27T19:47:57.215Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -399,7 +399,10 @@ window.ELF_DATA = {
       ],
       "size": "150",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/pdrn-tone-on-jelly-essence-vt-mwze8lum0.jpg",
+        "assets/products/pdrn-tone-on-jelly-essence-vt-mwze8lum1.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
