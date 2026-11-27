@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T22:12:06.187Z",
+  "updatedAt": "2026-11-27T22:14:46.545Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -2737,7 +2737,7 @@ window.ELF_DATA = {
     },
     {
       "id": "ricocell-pomegranate",
-      "cat": "skincare",
+      "cat": "sheetmask",
       "price": 50,
       "oldPrice": null,
       "tags": [
@@ -2745,7 +2745,10 @@ window.ELF_DATA = {
       ],
       "size": "33",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/ricocell-pomegranate-mwzjhf680.jpg",
+        "assets/products/ricocell-pomegranate-mwzjhf681.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
