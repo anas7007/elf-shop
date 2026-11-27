@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T21:53:36.939Z",
+  "updatedAt": "2026-11-27T21:55:30.690Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -2332,15 +2332,20 @@ window.ELF_DATA = {
     },
     {
       "id": "tony-moly-coconut",
-      "cat": "skincare",
+      "cat": "sheetmask",
       "price": 60,
       "oldPrice": null,
       "tags": [
-        "new"
+        "best"
       ],
       "size": "33",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/tony-moly-coconut-mwzisnb40.jpg",
+        "assets/products/tony-moly-coconut-mwzisnb41.jpg",
+        "assets/products/tony-moly-coconut-mwzisnb42.jpg",
+        "assets/products/tony-moly-coconut-mwzisnb43.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
