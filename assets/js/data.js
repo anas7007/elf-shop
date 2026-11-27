@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T20:28:52.614Z",
+  "updatedAt": "2026-11-27T20:32:50.417Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -858,7 +858,13 @@ window.ELF_DATA = {
       ],
       "size": "80",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/lip-mask-berry-as-us-mwzfubxs0.jpg",
+        "assets/products/lip-mask-berry-as-us-mwzfubxs1.jpg",
+        "assets/products/lip-mask-berry-as-us-mwzfubxs2.jpg",
+        "assets/products/lip-mask-berry-as-us-mwzfubxs3.jpg",
+        "assets/products/lip-mask-berry-as-us-mwzfubxs4.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
