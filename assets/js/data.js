@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T19:28:45.680Z",
+  "updatedAt": "2026-11-27T19:42:43.765Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -324,7 +324,12 @@ window.ELF_DATA = {
       ],
       "size": "200",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/silk-treatment-re-noia-mwze1vzo0.jpg",
+        "assets/products/silk-treatment-re-noia-mwze1vzo1.jpg",
+        "assets/products/silk-treatment-re-noia-mwze1vzo2.jpg",
+        "assets/products/silk-treatment-re-noia-mwze1vzo3.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
