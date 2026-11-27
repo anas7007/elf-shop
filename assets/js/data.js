@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T20:17:32.434Z",
+  "updatedAt": "2026-11-27T20:24:54.214Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -744,7 +744,12 @@ window.ELF_DATA = {
       ],
       "size": "70",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/dr-cpu-whitening-vital-booster-ampoule-mwzfk4hx0.jpg",
+        "assets/products/dr-cpu-whitening-vital-booster-ampoule-mwzfk4hx1.jpg",
+        "assets/products/dr-cpu-whitening-vital-booster-ampoule-mwzfk4hx2.jpg",
+        "assets/products/dr-cpu-whitening-vital-booster-ampoule-mwzfk4hx3.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
