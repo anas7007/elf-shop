@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T22:03:09.188Z",
+  "updatedAt": "2026-11-27T22:04:58.032Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -2593,7 +2593,7 @@ window.ELF_DATA = {
     },
     {
       "id": "ricocell-potato",
-      "cat": "skincare",
+      "cat": "sheetmask",
       "price": 50,
       "oldPrice": null,
       "tags": [
@@ -2601,7 +2601,10 @@ window.ELF_DATA = {
       ],
       "size": "33",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/ricocell-potato-mwzj4t2n0.jpg",
+        "assets/products/ricocell-potato-mwzj4t2n1.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
