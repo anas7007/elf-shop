@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T22:23:08.166Z",
+  "updatedAt": "2026-11-27T22:26:53.221Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -1567,7 +1567,11 @@ window.ELF_DATA = {
       ],
       "size": "5",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/reedle-shot-facial-repair-egf-essence-vt-mwzjwzvo0.jpg",
+        "assets/products/reedle-shot-facial-repair-egf-essence-vt-mwzjwzvo1.jpg",
+        "assets/products/reedle-shot-facial-repair-egf-essence-vt-mwzjwzvo2.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
