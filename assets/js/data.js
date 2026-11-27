@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T21:06:22.452Z",
+  "updatedAt": "2026-11-27T21:08:10.298Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -1269,7 +1269,11 @@ window.ELF_DATA = {
       ],
       "size": "30",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/water-glow-pop-play-101-no3-salmon-sparkle-mwzh3rne0.jpg",
+        "assets/products/water-glow-pop-play-101-no3-salmon-sparkle-mwzh3rne1.jpg",
+        "assets/products/water-glow-pop-play-101-no3-salmon-sparkle-mwzh3rne2.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
