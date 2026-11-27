@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T19:04:17.705Z",
+  "updatedAt": "2026-11-27T19:05:31.427Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -1853,7 +1853,7 @@ window.ELF_DATA = {
       "price": 1000,
       "oldPrice": null,
       "tags": [
-        "new"
+        "best"
       ],
       "size": "57",
       "hidden": false,
@@ -1985,7 +1985,7 @@ window.ELF_DATA = {
       "price": 300,
       "oldPrice": null,
       "tags": [
-        "new"
+        "best"
       ],
       "size": "20",
       "hidden": false,
