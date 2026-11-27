@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T22:36:00.267Z",
+  "updatedAt": "2026-11-27T22:38:09.036Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -1719,7 +1719,11 @@ window.ELF_DATA = {
       ],
       "size": "30",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/sulwhasoo-balancing-water-mwzkbhcb0.jpg",
+        "assets/products/sulwhasoo-balancing-water-mwzkbhcb1.jpg",
+        "assets/products/sulwhasoo-balancing-water-mwzkbhcb2.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
@@ -1728,7 +1732,7 @@ window.ELF_DATA = {
       },
       "name": {
         "ar": "سولوهاسو ماء موازن",
-        "en": "sulwhasoo balancing water",
+        "en": "sulwhasoo balancing water mini",
         "ko": ""
       },
       "desc": {
