@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T21:48:10.770Z",
+  "updatedAt": "2026-11-27T21:52:11.790Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -2295,7 +2295,7 @@ window.ELF_DATA = {
     },
     {
       "id": "tony-moly-strawbery",
-      "cat": "skincare",
+      "cat": "sheetmask",
       "price": 60,
       "oldPrice": null,
       "tags": [
@@ -2303,7 +2303,11 @@ window.ELF_DATA = {
       ],
       "size": "33",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/tony-moly-strawbery-mwziodu60.jpg",
+        "assets/products/tony-moly-strawbery-mwziodu61.jpg",
+        "assets/products/tony-moly-strawbery-mwziodu62.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
