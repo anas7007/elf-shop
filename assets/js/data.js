@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T22:04:58.032Z",
+  "updatedAt": "2026-11-27T22:06:31.525Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -2629,7 +2629,7 @@ window.ELF_DATA = {
     },
     {
       "id": "ricocell-royal-jelly",
-      "cat": "skincare",
+      "cat": "sheetmask",
       "price": 50,
       "oldPrice": null,
       "tags": [
@@ -2637,7 +2637,10 @@ window.ELF_DATA = {
       ],
       "size": "33",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/ricocell-royal-jelly-mwzj6t7o0.jpg",
+        "assets/products/ricocell-royal-jelly-mwzj6t7o1.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
