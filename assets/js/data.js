@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T21:58:06.897Z",
+  "updatedAt": "2026-11-27T21:59:18.169Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -2452,7 +2452,11 @@ window.ELF_DATA = {
       ],
       "size": "33",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/tony-moly-pienapple-mwzixiu10.jpg",
+        "assets/products/tony-moly-pienapple-mwzixiu11.jpg",
+        "assets/products/tony-moly-pienapple-mwzixiu12.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
