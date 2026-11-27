@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T20:24:54.214Z",
+  "updatedAt": "2026-11-27T20:26:44.242Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -782,7 +782,12 @@ window.ELF_DATA = {
       ],
       "size": "70",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/dr-cpu-norishing-active-booster-ampoule-mwzfmhea0.jpg",
+        "assets/products/dr-cpu-norishing-active-booster-ampoule-mwzfmhea1.jpg",
+        "assets/products/dr-cpu-norishing-active-booster-ampoule-mwzfmhea2.jpg",
+        "assets/products/dr-cpu-norishing-active-booster-ampoule-mwzfmhea3.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
