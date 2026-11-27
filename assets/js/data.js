@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T22:17:40.896Z",
+  "updatedAt": "2026-11-27T22:18:54.307Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -2845,7 +2845,7 @@ window.ELF_DATA = {
     },
     {
       "id": "ricocell-green-tea",
-      "cat": "skincare",
+      "cat": "sheetmask",
       "price": 50,
       "oldPrice": null,
       "tags": [
@@ -2853,7 +2853,10 @@ window.ELF_DATA = {
       ],
       "size": "33",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/ricocell-green-tea-mwzjmqcj0.jpg",
+        "assets/products/ricocell-green-tea-mwzjmqcj1.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
