@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T21:18:27.546Z",
+  "updatedAt": "2026-11-27T21:24:30.981Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -1456,7 +1456,11 @@ window.ELF_DATA = {
       ],
       "size": "10",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/over-night-firming-retinol-sleeping-mask-banila-co-mwzhosck0.jpg",
+        "assets/products/over-night-firming-retinol-sleeping-mask-banila-co-mwzhosck1.jpg",
+        "assets/products/over-night-firming-retinol-sleeping-mask-banila-co-mwzhosck2.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
