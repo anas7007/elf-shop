@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T20:27:48.181Z",
+  "updatedAt": "2026-11-27T20:28:52.614Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -820,7 +820,12 @@ window.ELF_DATA = {
       ],
       "size": "70",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/dr-cpu-hydrating-hydro-booster-ampoule-mwzfp8g60.jpg",
+        "assets/products/dr-cpu-hydrating-hydro-booster-ampoule-mwzfp8g61.jpg",
+        "assets/products/dr-cpu-hydrating-hydro-booster-ampoule-mwzfp8g62.jpg",
+        "assets/products/dr-cpu-hydrating-hydro-booster-ampoule-mwzfp8g63.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
