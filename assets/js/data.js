@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T22:20:50.635Z",
+  "updatedAt": "2026-11-27T22:23:08.166Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -2917,7 +2917,7 @@ window.ELF_DATA = {
     },
     {
       "id": "mwdiheal-birch-dermaplus-mask",
-      "cat": "skincare",
+      "cat": "sheetmask",
       "price": 50,
       "oldPrice": null,
       "tags": [
@@ -2925,7 +2925,11 @@ window.ELF_DATA = {
       ],
       "size": "33",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/mwdiheal-birch-dermaplus-mask-mwzjs6850.jpg",
+        "assets/products/mwdiheal-birch-dermaplus-mask-mwzjs6851.jpg",
+        "assets/products/mwdiheal-birch-dermaplus-mask-mwzjs6852.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
@@ -2934,7 +2938,7 @@ window.ELF_DATA = {
       },
       "name": {
         "ar": "مديهيل ماسك ورقي بيرش ديرما بلاس",
-        "en": "mwdiheal birch dermaplus mask",
+        "en": "mediheal birch dermaplus mask",
         "ko": ""
       },
       "desc": {
