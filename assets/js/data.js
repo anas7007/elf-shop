@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T21:43:51.284Z",
+  "updatedAt": "2026-11-27T21:46:47.588Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -2227,7 +2227,12 @@ window.ELF_DATA = {
       ],
       "size": "33",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/tony-moly-pomegranate-mwzihfoj0.jpg",
+        "assets/products/tony-moly-pomegranate-mwzihfoj1.jpg",
+        "assets/products/tony-moly-pomegranate-mwzihfoj2.jpg",
+        "assets/products/tony-moly-pomegranate-mwzihfoj3.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
