@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T20:08:30.662Z",
+  "updatedAt": "2026-11-27T20:14:44.436Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -620,39 +620,6 @@ window.ELF_DATA = {
       }
     },
     {
-      "id": "spot-calming-gel-bye-od-td",
-      "cat": "skincare",
-      "price": 350,
-      "oldPrice": null,
-      "tags": [
-        "new"
-      ],
-      "size": "30",
-      "hidden": false,
-      "images": [],
-      "art": {
-        "type": "bottle",
-        "c1": "#E8ECFF",
-        "c2": "#2B35D8",
-        "label": "SPOT"
-      },
-      "name": {
-        "ar": "جيل تهدئة البقع bye od td",
-        "en": "spot calming gel bye od td",
-        "ko": ""
-      },
-      "desc": {
-        "ar": "",
-        "en": "",
-        "ko": ""
-      },
-      "usage": {
-        "ar": "",
-        "en": "",
-        "ko": ""
-      }
-    },
-    {
       "id": "spot-calming-gel-bye-od-td-copy",
       "cat": "skincare",
       "price": 350,
@@ -699,7 +666,13 @@ window.ELF_DATA = {
       ],
       "size": "55",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/watermelon-hand-cream-the-face-shop-mwzf71zm0.jpg",
+        "assets/products/watermelon-hand-cream-the-face-shop-mwzf71zm1.jpg",
+        "assets/products/watermelon-hand-cream-the-face-shop-mwzf71zm2.jpg",
+        "assets/products/watermelon-hand-cream-the-face-shop-mwzf71zm3.jpg",
+        "assets/products/watermelon-hand-cream-the-face-shop-mwzf71zm4.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
