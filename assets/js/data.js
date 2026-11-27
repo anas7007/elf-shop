@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T21:25:32.350Z",
+  "updatedAt": "2026-11-27T21:29:52.103Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -1530,7 +1530,11 @@ window.ELF_DATA = {
       ],
       "size": "5",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/clean-it-zero-matcha-enzyme-powder-wash-mwzhvo4m0.jpg",
+        "assets/products/clean-it-zero-matcha-enzyme-powder-wash-mwzhvo4m1.jpg",
+        "assets/products/clean-it-zero-matcha-enzyme-powder-wash-mwzhvo4m2.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
