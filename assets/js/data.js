@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T21:08:10.298Z",
+  "updatedAt": "2026-11-27T21:10:02.526Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -1306,7 +1306,12 @@ window.ELF_DATA = {
       ],
       "size": "30",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/pdrn-glow-lip-serum-rosy-peach-vt-mwzh668t0.jpg",
+        "assets/products/pdrn-glow-lip-serum-rosy-peach-vt-mwzh668t1.jpg",
+        "assets/products/pdrn-glow-lip-serum-rosy-peach-vt-mwzh668t2.jpg",
+        "assets/products/pdrn-glow-lip-serum-rosy-peach-vt-mwzh668t3.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
