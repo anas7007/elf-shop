@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T19:47:57.215Z",
+  "updatedAt": "2026-11-27T19:51:01.911Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -435,7 +435,11 @@ window.ELF_DATA = {
       ],
       "size": "70",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/via-c-cream-boncept-mwzeckd20.jpg",
+        "assets/products/via-c-cream-boncept-mwzeckd21.jpg",
+        "assets/products/via-c-cream-boncept-mwzeckd22.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
