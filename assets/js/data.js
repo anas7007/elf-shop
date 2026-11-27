@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T21:15:13.848Z",
+  "updatedAt": "2026-11-27T21:18:27.546Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -1414,14 +1414,16 @@ window.ELF_DATA = {
     {
       "id": "cover-up-blemish-patch-k-signature-edition-p-careplus",
       "cat": "skincare",
-      "price": 90,
+      "price": 300,
       "oldPrice": null,
       "tags": [
         "new"
       ],
       "size": "10",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/cover-up-blemish-patch-k-signature-edition-p-careplus-mwzhgzx60.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
@@ -1430,7 +1432,7 @@ window.ELF_DATA = {
       },
       "name": {
         "ar": "باتش تغطية العيوب ك.سيجنيتشر إديشن بي كير بلاس",
-        "en": "cover up blemish patch k.signature edition p careplus",
+        "en": "cover up blemish patch k.signature edition p careplus  48 patch",
         "ko": ""
       },
       "desc": {
