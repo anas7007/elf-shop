@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T22:29:16.460Z",
+  "updatedAt": "2026-11-27T22:31:39.293Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -1643,7 +1643,11 @@ window.ELF_DATA = {
       ],
       "size": "15",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/eye-brows-razor-mwzk34m40.jpg",
+        "assets/products/eye-brows-razor-mwzk34m41.jpg",
+        "assets/products/eye-brows-razor-mwzk34m42.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
@@ -1656,8 +1660,8 @@ window.ELF_DATA = {
         "ko": ""
       },
       "desc": {
-        "ar": "",
-        "en": "",
+        "ar": "الكيس به قطعتين",
+        "en": "The bag has 2 pcs",
         "ko": ""
       },
       "usage": {
