@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T19:51:01.911Z",
+  "updatedAt": "2026-11-27T19:54:27.197Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -472,7 +472,13 @@ window.ELF_DATA = {
       ],
       "size": "50",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/age-renew-eye-cream-wrinkle-ahc-mwzegyrg0.jpg",
+        "assets/products/age-renew-eye-cream-wrinkle-ahc-mwzegyrg1.jpg",
+        "assets/products/age-renew-eye-cream-wrinkle-ahc-mwzegyrg2.jpg",
+        "assets/products/age-renew-eye-cream-wrinkle-ahc-mwzegyrg3.jpg",
+        "assets/products/age-renew-eye-cream-wrinkle-ahc-mwzegyrg4.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
