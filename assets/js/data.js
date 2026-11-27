@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T20:40:00.970Z",
+  "updatedAt": "2026-11-27T20:44:18.213Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -973,7 +973,12 @@ window.ELF_DATA = {
       ],
       "size": "70",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/melanonx-dark-spot-cream-medipeel-mwzg92n90.jpg",
+        "assets/products/melanonx-dark-spot-cream-medipeel-mwzg92n91.jpg",
+        "assets/products/melanonx-dark-spot-cream-medipeel-mwzg92n92.jpg",
+        "assets/products/melanonx-dark-spot-cream-medipeel-mwzg92n93.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
