@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T22:31:39.293Z",
+  "updatedAt": "2026-11-27T22:36:00.267Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -1680,7 +1680,13 @@ window.ELF_DATA = {
       ],
       "size": "30",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/sulwhasoo-firming-cream-mwzk8pze0.jpg",
+        "assets/products/sulwhasoo-firming-cream-mwzk8pze1.jpg",
+        "assets/products/sulwhasoo-firming-cream-mwzk8pze2.jpg",
+        "assets/products/sulwhasoo-firming-cream-mwzk8pze3.jpg",
+        "assets/products/sulwhasoo-firming-cream-mwzk8pze4.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
@@ -1689,7 +1695,7 @@ window.ELF_DATA = {
       },
       "name": {
         "ar": "كريم مرطب لتقوية البشرة سول وها سو",
-        "en": "sulwhasoo firming cream",
+        "en": "Sulwhasoo firming cream mini",
         "ko": ""
       },
       "desc": {
