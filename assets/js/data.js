@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T22:02:05.722Z",
+  "updatedAt": "2026-11-27T22:03:09.188Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -2444,7 +2444,7 @@ window.ELF_DATA = {
     },
     {
       "id": "tony-moly-pienapple",
-      "cat": "skincare",
+      "cat": "sheetmask",
       "price": 60,
       "oldPrice": null,
       "tags": [
@@ -2557,7 +2557,7 @@ window.ELF_DATA = {
     },
     {
       "id": "ricocell-aloe",
-      "cat": "skincare",
+      "cat": "sheetmask",
       "price": 50,
       "oldPrice": null,
       "tags": [
@@ -2565,7 +2565,10 @@ window.ELF_DATA = {
       ],
       "size": "33",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/ricocell-aloe-mwzj2h370.jpg",
+        "assets/products/ricocell-aloe-mwzj2h371.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
