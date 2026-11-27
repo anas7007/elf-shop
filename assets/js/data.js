@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T21:56:52.191Z",
+  "updatedAt": "2026-11-27T21:58:06.897Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -2485,7 +2485,12 @@ window.ELF_DATA = {
       ],
       "size": "33",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/tony-moly-tomato-mwzivzu70.jpg",
+        "assets/products/tony-moly-tomato-mwzivzu71.jpg",
+        "assets/products/tony-moly-tomato-mwzivzu72.jpg",
+        "assets/products/tony-moly-tomato-mwzivzu73.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
