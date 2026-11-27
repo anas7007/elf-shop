@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T22:38:09.036Z",
+  "updatedAt": "2026-11-27T22:39:39.629Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -1756,7 +1756,10 @@ window.ELF_DATA = {
       ],
       "size": "30",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/sulwhasoo-balancing-emulsion-mwzkdf8s0.jpg",
+        "assets/products/sulwhasoo-balancing-emulsion-mwzkdf8s1.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
@@ -1765,7 +1768,7 @@ window.ELF_DATA = {
       },
       "name": {
         "ar": "سولوهاسو إيمولشن موازن",
-        "en": "sulwhasoo balancing emulsion",
+        "en": "sulwhasoo balancing emulsion mini",
         "ko": ""
       },
       "desc": {
