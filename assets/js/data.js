@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T22:26:53.221Z",
+  "updatedAt": "2026-11-27T22:29:16.460Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -1604,7 +1604,13 @@ window.ELF_DATA = {
       ],
       "size": "5",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/cica-vital-sleeping-mask-vt-mwzk02ei0.jpg",
+        "assets/products/cica-vital-sleeping-mask-vt-mwzk02ei1.jpg",
+        "assets/products/cica-vital-sleeping-mask-vt-mwzk02ei2.jpg",
+        "assets/products/cica-vital-sleeping-mask-vt-mwzk02ei3.jpg",
+        "assets/products/cica-vital-sleeping-mask-vt-mwzk02ei4.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
