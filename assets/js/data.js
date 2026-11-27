@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T21:52:11.790Z",
+  "updatedAt": "2026-11-27T21:53:36.939Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -2365,7 +2365,7 @@ window.ELF_DATA = {
     },
     {
       "id": "tony-moly-shine-muscat",
-      "cat": "skincare",
+      "cat": "sheetmask",
       "price": 60,
       "oldPrice": null,
       "tags": [
@@ -2373,7 +2373,11 @@ window.ELF_DATA = {
       ],
       "size": "33",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/tony-moly-shine-muscat-mwziq7je0.jpg",
+        "assets/products/tony-moly-shine-muscat-mwziq7je1.jpg",
+        "assets/products/tony-moly-shine-muscat-mwziq7je2.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
