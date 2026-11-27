@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T22:14:46.545Z",
+  "updatedAt": "2026-11-27T22:16:15.929Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -2773,7 +2773,7 @@ window.ELF_DATA = {
     },
     {
       "id": "ricocell-rice",
-      "cat": "skincare",
+      "cat": "sheetmask",
       "price": 50,
       "oldPrice": null,
       "tags": [
@@ -2781,7 +2781,10 @@ window.ELF_DATA = {
       ],
       "size": "33",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/ricocell-rice-mwzjjc540.jpg",
+        "assets/products/ricocell-rice-mwzjjc541.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
