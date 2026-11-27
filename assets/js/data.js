@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T22:18:54.307Z",
+  "updatedAt": "2026-11-27T22:20:50.635Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -2881,7 +2881,7 @@ window.ELF_DATA = {
     },
     {
       "id": "ricocell-sea-weed",
-      "cat": "skincare",
+      "cat": "sheetmask",
       "price": 50,
       "oldPrice": null,
       "tags": [
@@ -2889,7 +2889,10 @@ window.ELF_DATA = {
       ],
       "size": "33",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/ricocell-sea-weed-mwzjp83u0.jpg",
+        "assets/products/ricocell-sea-weed-mwzjp83u1.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
