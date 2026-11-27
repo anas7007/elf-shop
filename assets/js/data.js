@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T19:05:31.427Z",
+  "updatedAt": "2026-11-27T19:07:08.248Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -174,7 +174,10 @@ window.ELF_DATA = {
         "best"
       ],
       "size": "35 cm",
-      "images": [],
+      "images": [
+        "assets/products/hanji-fan-mwzcs47m0.jpg",
+        "assets/products/hanji-fan-mwzcs47m1.jpg"
+      ],
       "art": {
         "type": "fan",
         "c1": "#FFF3E8",
