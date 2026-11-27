@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T19:59:10.336Z",
+  "updatedAt": "2026-11-27T20:02:12.514Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -554,7 +554,10 @@ window.ELF_DATA = {
       ],
       "size": "90",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/super-aqua-sun-cream-re-cipe-sun-moon-lab-mwzeqxsx0.jpg",
+        "assets/products/super-aqua-sun-cream-re-cipe-sun-moon-lab-mwzeqxsx1.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
