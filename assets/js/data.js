@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T21:10:02.526Z",
+  "updatedAt": "2026-11-27T21:12:21.097Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -1344,7 +1344,12 @@ window.ELF_DATA = {
       ],
       "size": "5",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/nose-pack-coacos-mwzh95600.jpg",
+        "assets/products/nose-pack-coacos-mwzh95601.jpg",
+        "assets/products/nose-pack-coacos-mwzh95602.jpg",
+        "assets/products/nose-pack-coacos-mwzh95603.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
@@ -1352,7 +1357,7 @@ window.ELF_DATA = {
         "label": "NOSE"
       },
       "name": {
-        "ar": "حزمة أنف كوكوس",
+        "ar": "حزمة أنف كوكوس شيت واحد ",
         "en": "nose pack coacos",
         "ko": ""
       },
