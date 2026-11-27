@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T22:09:11.942Z",
+  "updatedAt": "2026-11-27T22:10:57.280Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -2665,7 +2665,7 @@ window.ELF_DATA = {
     },
     {
       "id": "ricocell-collagen",
-      "cat": "skincare",
+      "cat": "sheetmask",
       "price": 50,
       "oldPrice": null,
       "tags": [
@@ -2673,7 +2673,10 @@ window.ELF_DATA = {
       ],
       "size": "33",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/ricocell-collagen-mwzjci9p0.jpg",
+        "assets/products/ricocell-collagen-mwzjci9p1.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
