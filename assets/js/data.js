@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T19:12:23.867Z",
+  "updatedAt": "2026-11-27T19:24:09.056Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -248,7 +248,12 @@ window.ELF_DATA = {
       ],
       "size": "75",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/pdrn-exosome-glow-plumping-shot-x2-dermafirm-mwzddzvi0.jpg",
+        "assets/products/pdrn-exosome-glow-plumping-shot-x2-dermafirm-mwzddzvi1.jpg",
+        "assets/products/pdrn-exosome-glow-plumping-shot-x2-dermafirm-mwzddzvi2.jpg",
+        "assets/products/pdrn-exosome-glow-plumping-shot-x2-dermafirm-mwzddzvi3.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
