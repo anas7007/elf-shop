@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T21:59:18.169Z",
+  "updatedAt": "2026-11-27T22:00:35.610Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -2527,7 +2527,12 @@ window.ELF_DATA = {
       ],
       "size": "45",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/biodance-hydro-cera-nol-real-deep-mask-mwziz6l50.jpg",
+        "assets/products/biodance-hydro-cera-nol-real-deep-mask-mwziz6l51.jpg",
+        "assets/products/biodance-hydro-cera-nol-real-deep-mask-mwziz6l52.jpg",
+        "assets/products/biodance-hydro-cera-nol-real-deep-mask-mwziz6l53.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
