@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T20:05:23.583Z",
+  "updatedAt": "2026-11-27T20:08:30.662Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -630,6 +630,43 @@ window.ELF_DATA = {
       "size": "30",
       "hidden": false,
       "images": [],
+      "art": {
+        "type": "bottle",
+        "c1": "#E8ECFF",
+        "c2": "#2B35D8",
+        "label": "SPOT"
+      },
+      "name": {
+        "ar": "جيل تهدئة البقع bye od td",
+        "en": "spot calming gel bye od td",
+        "ko": ""
+      },
+      "desc": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      },
+      "usage": {
+        "ar": "",
+        "en": "",
+        "ko": ""
+      }
+    },
+    {
+      "id": "spot-calming-gel-bye-od-td-copy",
+      "cat": "skincare",
+      "price": 350,
+      "oldPrice": null,
+      "tags": [
+        "new"
+      ],
+      "size": "30",
+      "hidden": false,
+      "images": [
+        "assets/products/spot-calming-gel-bye-od-td-copy-mwzez1l20.jpg",
+        "assets/products/spot-calming-gel-bye-od-td-copy-mwzez1l21.jpg",
+        "assets/products/spot-calming-gel-bye-od-td-copy-mwzez1l22.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
