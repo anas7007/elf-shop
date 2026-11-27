@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T20:49:22.630Z",
+  "updatedAt": "2026-11-27T20:52:01.356Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -1084,7 +1084,10 @@ window.ELF_DATA = {
       ],
       "size": "30",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/boncept-water-veil-tint-06-strawberry-water-mwzgj00b0.jpg",
+        "assets/products/boncept-water-veil-tint-06-strawberry-water-mwzgj00b1.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
