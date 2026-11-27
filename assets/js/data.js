@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T19:24:09.056Z",
+  "updatedAt": "2026-11-27T19:28:45.680Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -286,7 +286,12 @@ window.ELF_DATA = {
       ],
       "size": "55",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/small-molecule-collagen-wrinkle-ampoule-cleaderm-mwzdjxbg0.jpg",
+        "assets/products/small-molecule-collagen-wrinkle-ampoule-cleaderm-mwzdjxbg1.jpg",
+        "assets/products/small-molecule-collagen-wrinkle-ampoule-cleaderm-mwzdjxbg2.jpg",
+        "assets/products/small-molecule-collagen-wrinkle-ampoule-cleaderm-mwzdjxbg3.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
