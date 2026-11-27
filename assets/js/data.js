@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T22:00:35.610Z",
+  "updatedAt": "2026-11-27T22:02:05.722Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -2407,7 +2407,7 @@ window.ELF_DATA = {
     },
     {
       "id": "tony-moly-aloe",
-      "cat": "skincare",
+      "cat": "sheetmask",
       "price": 60,
       "oldPrice": null,
       "tags": [
