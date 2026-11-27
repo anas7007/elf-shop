@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T19:07:08.248Z",
+  "updatedAt": "2026-11-27T19:12:23.867Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -210,7 +210,12 @@ window.ELF_DATA = {
       ],
       "size": "75",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/retinoid-exosome-pore-lifting-shot-x2-dermafirm-mwzcyvqt0.jpg",
+        "assets/products/retinoid-exosome-pore-lifting-shot-x2-dermafirm-mwzcyvqt1.jpg",
+        "assets/products/retinoid-exosome-pore-lifting-shot-x2-dermafirm-mwzcyvqt2.jpg",
+        "assets/products/retinoid-exosome-pore-lifting-shot-x2-dermafirm-mwzcyvqt3.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
