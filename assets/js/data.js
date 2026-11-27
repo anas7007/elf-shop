@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T19:54:27.197Z",
+  "updatedAt": "2026-11-27T19:59:10.336Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -507,11 +507,21 @@ window.ELF_DATA = {
       "price": 350,
       "oldPrice": null,
       "tags": [
-        "new"
+        "best"
       ],
       "size": "70",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/extra-super-9-blackhead-care-solution-medipeel-mwzen18f0.jpg",
+        "assets/products/extra-super-9-blackhead-care-solution-medipeel-mwzen18f1.jpg",
+        "assets/products/extra-super-9-blackhead-care-solution-medipeel-mwzen18f2.jpg",
+        "assets/products/extra-super-9-blackhead-care-solution-medipeel-mwzen18f3.jpg",
+        "assets/products/extra-super-9-blackhead-care-solution-medipeel-mwzen18f4.jpg",
+        "assets/products/extra-super-9-blackhead-care-solution-medipeel-mwzen18f5.jpg",
+        "assets/products/extra-super-9-blackhead-care-solution-medipeel-mwzen18f6.jpg",
+        "assets/products/extra-super-9-blackhead-care-solution-medipeel-mwzen18f7.jpg",
+        "assets/products/extra-super-9-blackhead-care-solution-medipeel-mwzen18f8.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
