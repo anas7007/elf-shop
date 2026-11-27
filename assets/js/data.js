@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T20:52:01.356Z",
+  "updatedAt": "2026-11-27T20:54:42.837Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -1120,7 +1120,11 @@ window.ELF_DATA = {
       ],
       "size": "30",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/boncept-chiffon-bonding-tint-02-pink-chiffon-mwzgmglw0.jpg",
+        "assets/products/boncept-chiffon-bonding-tint-02-pink-chiffon-mwzgmglw1.jpg",
+        "assets/products/boncept-chiffon-bonding-tint-02-pink-chiffon-mwzgmglw2.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
