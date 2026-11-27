@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T20:44:18.213Z",
+  "updatedAt": "2026-11-27T20:46:10.261Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -1011,7 +1011,11 @@ window.ELF_DATA = {
       ],
       "size": "30",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/reedle-shot-essence-lip-plumper-no-2-vt-mwzgbh3p0.jpg",
+        "assets/products/reedle-shot-essence-lip-plumper-no-2-vt-mwzgbh3p1.jpg",
+        "assets/products/reedle-shot-essence-lip-plumper-no-2-vt-mwzgbh3p2.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
