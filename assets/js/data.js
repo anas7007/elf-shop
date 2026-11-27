@@ -7,7 +7,7 @@
    ========================================================= */
 window.ELF_DATA = {
   "version": 1,
-  "updatedAt": "2026-11-27T20:35:55.751Z",
+  "updatedAt": "2026-11-27T20:40:00.970Z",
   "settings": {
     "storeName": "The Elf Shop",
     "since": 2013,
@@ -933,7 +933,14 @@ window.ELF_DATA = {
       ],
       "size": "40",
       "hidden": false,
-      "images": [],
+      "images": [
+        "assets/products/personal-wearing-pocket-foun-cushion-no-21-ipkn-mwzg3k5k0.jpg",
+        "assets/products/personal-wearing-pocket-foun-cushion-no-21-ipkn-mwzg3k5k1.jpg",
+        "assets/products/personal-wearing-pocket-foun-cushion-no-21-ipkn-mwzg3k5k2.jpg",
+        "assets/products/personal-wearing-pocket-foun-cushion-no-21-ipkn-mwzg3k5k3.jpg",
+        "assets/products/personal-wearing-pocket-foun-cushion-no-21-ipkn-mwzg3k5k4.jpg",
+        "assets/products/personal-wearing-pocket-foun-cushion-no-21-ipkn-mwzg3k5k5.jpg"
+      ],
       "art": {
         "type": "bottle",
         "c1": "#E8ECFF",
